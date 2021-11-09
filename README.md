@@ -2,4 +2,4 @@
 Integrantes:
 
 -Sebastian Toro Urrego @storo16
-_Mayerlín Mondol Cortés  *@Maye116    *Administrador en sistemas computacionales
+-Mayerlín Mondol Cortés  *@Maye116    *Administrador en sistemas computacionales
