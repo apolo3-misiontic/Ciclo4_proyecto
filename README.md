@@ -8,3 +8,5 @@ Integrantes:
 -Hansee Jimenez Perez @HansJP96
 
 -Esteban Rojas Sáenz @EstebanRSaenz
+
+-Kevin Santiago Cruz  @CruzSanti
