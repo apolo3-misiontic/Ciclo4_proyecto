@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
+//import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import "./Main.css";
-import _, { filter } from "underscore";
-import { Tooltip } from "@material-ui/core";
+//import _, { filter } from "underscore";
+//import { Tooltip } from "@material-ui/core";
 
 const Usuarios = () => {
   // eslint-disable-next-line no-unused-vars
-  const [mostrarTabla, setMostrarTabla] = useState(true);
+  /*const [mostrarTabla, setMostrarTabla] = useState(true);
   const [usuarios, setUsuarios] = useState([]);
 
   const ObtenerUsuarios = async () => {
@@ -35,7 +35,9 @@ const Usuarios = () => {
       ObtenerUsuarios();
     }
   }, [mostrarTabla]);
+  */
 
+  /*
   const aplicarFiltro = (filtro) => {
     var filtered = _(usuarios).filter((u) => {
       return (
@@ -46,10 +48,11 @@ const Usuarios = () => {
 
     setUsuarios(filtered);
   };
-
+  
   const limpiarFiltro = () => {
     ObtenerUsuarios();
   };
+  */
 
   return (
     <div>
@@ -58,7 +61,7 @@ const Usuarios = () => {
         rel="stylesheet"
       />
       <div className="flex-row items-center justify-center min-h-screen min-w-full px-5 py-12 lg:px-20 bg-gray-900">
-        <div className="">
+        {/*<div className="">
           <div
             class="flex items-center max-w-md mx-auto bg-white rounded-full "
             x-data="{ search: '' }"
@@ -99,7 +102,8 @@ const Usuarios = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>*/}
+
         <div className="text-green-300 mt-9 font-semibold">
           <h1 className="text-5xl">Usuarios</h1>
         </div>
@@ -109,18 +113,15 @@ const Usuarios = () => {
               <table className="table usuarios text-gray-400 border-separate space-y-6 text-sm">
                 <thead className="bg-gray-800 text-gray-100">
                   <tr>
-                    <th className="p-3 items-center justify-center ">Id</th>
+                    <th className="p-3 items-center justify-center ">Identificacion</th>
                     <th className="p-3 items-center justify-center ">Nombre</th>
-                    <th className="p-3 items-center justify-center ">
-                      Usuario
-                    </th>
+                    <th className="p-3 items-center justify-center ">Correo</th>
                     <th className="p-3 items-center justify-center ">Rol</th>
                     <th className="p-3 items-center justify-center ">Estado</th>
-                    <th className="p-3 items-center justify-center ">
-                      Acciones
-                    </th>
+                    <th className="p-3 items-center justify-center ">Acciones</th>
                   </tr>
                 </thead>
+                {/*
                 <tbody>
                   {usuarios.map((user) => {
                     return (
@@ -135,6 +136,7 @@ const Usuarios = () => {
                     );
                   })}
                 </tbody>
+                */}
               </table>
             </div>
             <div>
@@ -151,6 +153,7 @@ const Usuarios = () => {
   );
 };
 
+/*
 const TableItem = ({ Id, nombre, userName, rol, estado, refresh }) => {
   const borrarItem = async () => {
     Swal.fire({
@@ -186,6 +189,7 @@ const TableItem = ({ Id, nombre, userName, rol, estado, refresh }) => {
       }
     });
   };
+  
   return (
     <tr className="bg-gray-800 text-gray-100">
       <td className="p-3 justify-center items-center">
@@ -221,6 +225,9 @@ const TableItem = ({ Id, nombre, userName, rol, estado, refresh }) => {
       </td>
     </tr>
   );
+
 };
+*/
+
 
 export default Usuarios;
