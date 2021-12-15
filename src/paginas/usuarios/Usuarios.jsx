@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+//import React, { useEffect, useState } from "react";
+//import axios from "axios";
 //import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import "./Main.css";
+import Navbar from "../rutas/Navbar";
 //import _, { filter } from "underscore";
 //import { Tooltip } from "@material-ui/core";
 
@@ -55,6 +56,8 @@ const Usuarios = () => {
   */
 
   return (
+    <>
+    <Navbar>
     <div>
       <link
         href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
@@ -118,7 +121,6 @@ const Usuarios = () => {
                     <th className="p-3 items-center justify-center ">Correo</th>
                     <th className="p-3 items-center justify-center ">Rol</th>
                     <th className="p-3 items-center justify-center ">Estado</th>
-                    <th className="p-3 items-center justify-center ">Acciones</th>
                   </tr>
                 </thead>
                 {/*
@@ -150,6 +152,8 @@ const Usuarios = () => {
         </div>
       </div>
     </div>
+    </Navbar>
+    </>
   );
 };
 
