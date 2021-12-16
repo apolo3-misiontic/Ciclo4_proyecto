@@ -9,6 +9,7 @@ import Publico from './paginas/rutas/Publico';
 import { AuthContext } from './hooks/authContext';
 import { UsuarioContext } from './hooks/usuarioContext';
 import jwtDecode from 'jwt-decode';
+import Proyectos from './paginas/proyectos/Proyectos';
 import Usuarios from './paginas/usuarios/Usuarios';
 import CrearUsuario from './paginas/usuarios/Crear-Usuario';
 import DetalleUsuario from './paginas/usuarios/Detalle-Usuario';
@@ -49,6 +50,7 @@ function App() {
             </Route>
             <Route path="/" element={<Publico />}>
               <Route index element={<Presentacion />} />
+              <Route path="proyectos" element={<Proyectos />} />
               <Route path="usuarios" element={<Usuarios />} />
               <Route path="newuser" element={<CrearUsuario />} />
               <Route path="/detuser/:id" element={<DetalleUsuario />} />

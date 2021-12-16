@@ -10,8 +10,8 @@ i {
     border-radius: 20px;
 }
 
-.productos tr td:nth-child(n+6),
-.productos tr th:nth-child(n+6),
+.proyectos tr td:nth-child(n+9),
+.proyectos tr th:nth-child(n+9),
 .ventas tr td:nth-child(n+8),
 .ventas tr th:nth-child(n+8),
 .usuarios tr td:nth-child(n+5),
