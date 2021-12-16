@@ -12,6 +12,7 @@ import jwtDecode from 'jwt-decode';
 import Usuarios from './paginas/usuarios/Usuarios';
 import CrearUsuario from './paginas/usuarios/Crear-Usuario';
 import DetalleUsuario from './paginas/usuarios/Detalle-Usuario';
+import Login from './paginas/autorizacion/Login';
 
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
               <Route path="newuser" element={<CrearUsuario />} />
               <Route path="/detuser/:id" element={<DetalleUsuario />} />
               <Route path="ingresar" element={<Acceso />} />
+              <Route path="login" element={<Login />} />
               <Route path="registrar" element={<Registro />} />
             </Route>
           </Routes>

@@ -1,8 +1,8 @@
 //import React, { useEffect, useState } from "react";
 //import axios from "axios";
 //import Swal from "sweetalert2";
-import { Link } from "react-router-dom";
-import "./Main.css";
+//import { Link } from "react-router-dom";
+import "../estilos/Main.css";
 import Navbar from "../rutas/Navbar";
 //import _, { filter } from "underscore";
 //import { Tooltip } from "@material-ui/core";
@@ -107,8 +107,8 @@ const Usuarios = () => {
           </div>
         </div>*/}
 
-        <div className="text-green-300 mt-9 font-semibold">
-          <h1 className="text-5xl">Usuarios</h1>
+        <div className="flex items-center justify-center mb-3 text-green-300 mt-9 font-semibold">
+          <h1 className="text-4xl">Usuarios</h1>
         </div>
         <div className="flex items-center">
           <div className="overflow-auto lg:overflow-visible h-full w-full items-center">
@@ -141,13 +141,13 @@ const Usuarios = () => {
                 */}
               </table>
             </div>
-            <div>
+            {/* <div>
               <Link to="/newuser">
                 <button className="mt-5 p-2 pl-5 pr-5 bg-green-300 text-gray-800 hover:bg-green-800 hover:text-gray-200 text-lg rounded-lg focus:border-4 border-blue-300">
                   Agregar Usuario
                 </button>
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
