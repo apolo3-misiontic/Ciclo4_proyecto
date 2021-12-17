@@ -28,6 +28,11 @@
         "test": "craco test",
         "eject": "react-scripts eject"
     },
+
+    "engines": {
+        "node": "14.x"
+      },
+      
     "eslintConfig": {
         "extends": [
             "react-app",
@@ -52,3 +57,4 @@
         "tailwindcss": "npm:@tailwindcss/postcss7-compat"
     }
 }
+

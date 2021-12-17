@@ -13,41 +13,52 @@ const Navbar = ({ children }) => {
           rel="stylesheet"
           href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
         />
-        <div className="flex flex-col md:flex-row flex-nowrap h-full ">
-          <div className="min-h-screen flex flex-col bg-gray-600">
-            <div className="flex flex-col w-56 bg-gray-400 rounded-r-3xl overflow-hidden">
+        <div className="flex flex-col md:flex-row flex-nowrap h-full">
+          <div className="min-h-screen flex flex-col bg-gray-700">
+            <div className="flex flex-col mt-5 py-5 w-56 rounded-r-3xl overflow-hidden">
               <ul className="flex flex-col py-4">
-                <li>
+              <li>
                   <Link
-                    to="/admin/ventas"
-                    className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
+                    to="/avances"
+                    className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-100 hover:text-black"
                   >
-                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900">
+                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg">
                       <i className="bx bx-shopping-bag"></i>
                     </span>
-                    <span className="text-sm font-medium">Ventas</span>
+                    <span className="text-lg font-large">Avances</span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    to="/admin/Productos"
-                    className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
+                    to="/inscrip"
+                    className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-100 hover:text-black"
                   >
-                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900">
+                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg">
+                      <i className="bx bx-shopping-bag"></i>
+                    </span>
+                    <span className="text-lg font-large">Inscripciones</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/proyectos"
+                    className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-100 hover:text-black"
+                  >
+                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg">
                       <i className="bx bx-mouse"></i>
                     </span>
-                    <span className="text-sm font-medium">Productos</span>
+                    <span className="text-lg font-large">Proyectos</span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    to="/admin/Usuarios"
-                    className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
+                    to="/usuarios"
+                    className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-100 hover:text-black"
                   >
-                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900">
+                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg">
                       <i className="bx bx-user"></i>
                     </span>
-                    <span className="text-sm font-medium">Usuarios</span>
+                    <span className="text-lg font-large">Usuarios</span>
                   </Link>
                 </li>
                
@@ -55,7 +66,7 @@ const Navbar = ({ children }) => {
             </div>
           </div>
         </div>
-        <div className="flex  w-full flex-col items-stretch justify-start bg-gray-100">
+        <div className="flex  w-full flex-col items-stretch justify-start">
           {children}
         </div>
       </div>
