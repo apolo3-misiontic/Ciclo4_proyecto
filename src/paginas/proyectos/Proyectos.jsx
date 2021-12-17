@@ -60,7 +60,7 @@ const Proyectos = () => {
             <div className="flex items-center">
               <div className="overflow-auto lg:overflow-visible h-full w-full items-center">
                 <div className="flex w-full justify-center items-center ">
-                  <table className="table usuarios text-gray-400 border-separate space-y-6 text-sm">
+                  <table className="table proyectos text-gray-400 border-separate space-y-6 text-sm">
                     <thead className="bg-gray-800 text-gray-100">
                       <tr>
                         <th className="p-3 items-center justify-center ">Nombre</th>

@@ -35,14 +35,14 @@ const Login = () => {
           <div>
           <Link to='/' className= 'btnlink'>
             <button type='submit' className= 'boton bg-green-300' >
-              INICIAR SESION
+              Iniciar Sesión
             </button>
           </Link>
           </div>
           <div className='regdiv'>
             <span className= 'regtext'>Si no tienes cuenta</span>
             <Link className= 'reglink' to="/newuser">
-              <span className="text-green-300">REGISTRATE</span>
+              <span className="text-green-300">Registrate</span>
             </Link>
           </div>
         </form>
