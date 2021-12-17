@@ -22,7 +22,7 @@ const Navbar = ({ children }) => {
                     to="/admin/ventas"
                     className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
                   >
-                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400">
+                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900">
                       <i className="bx bx-shopping-bag"></i>
                     </span>
                     <span className="text-sm font-medium">Ventas</span>
@@ -33,7 +33,7 @@ const Navbar = ({ children }) => {
                     to="/admin/Productos"
                     className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
                   >
-                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400">
+                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900">
                       <i className="bx bx-mouse"></i>
                     </span>
                     <span className="text-sm font-medium">Productos</span>
@@ -44,7 +44,7 @@ const Navbar = ({ children }) => {
                     to="/admin/Usuarios"
                     className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800"
                   >
-                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400">
+                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-900">
                       <i className="bx bx-user"></i>
                     </span>
                     <span className="text-sm font-medium">Usuarios</span>

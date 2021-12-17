@@ -1,17 +1,18 @@
-//import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 //import axios from "axios";
-//import Swal from "sweetalert2";
-import { Link } from "react-router-dom";
-import "./Main.css";
 import Navbar from "../rutas/Navbar";
+import { Link } from "react-router-dom";
+import { ToastMui } from "../../componentes/ToastMui";
+import { useMutation, useQuery } from "@apollo/client"
+import { LISTAR_USUARIOS } from "../../graphql/Usuarios/QuerysUsuario";
+import { ACTUALIZAR_ESTADO_USUARIO } from "../../graphql/Usuarios/MutationsUsuario";
+import "./Main.css";
 //import _, { filter } from "underscore";
 //import { Tooltip } from "@material-ui/core";
-
 const Usuarios = () => {
   // eslint-disable-next-line no-unused-vars
   /*const [mostrarTabla, setMostrarTabla] = useState(true);
   const [usuarios, setUsuarios] = useState([]);
-
   const ObtenerUsuarios = async () => {
     const options = {
       method: "GET",
@@ -37,7 +38,7 @@ const Usuarios = () => {
     }
   }, [mostrarTabla]);
   */
-
+  const { data, loading, error } = useQuery(LISTAR_USUARIOS)
   /*
   const aplicarFiltro = (filtro) => {
     var filtered = _(usuarios).filter((u) => {
@@ -54,17 +55,16 @@ const Usuarios = () => {
     ObtenerUsuarios();
   };
   */
-
   return (
     <>
-    <Navbar>
-    <div>
-      <link
-        href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
-        rel="stylesheet"
-      />
-      <div className="flex-row items-center justify-center min-h-screen min-w-full px-5 py-12 lg:px-20 bg-gray-900">
-        {/*<div className="">
+      <Navbar>
+        <div>
+          <link
+            href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+            rel="stylesheet"
+          />
+          <div className="flex-row items-center justify-center min-h-screen min-w-full px-5 py-12 lg:px-20 bg-gray-900">
+            {/*<div className="">
           <div
             class="flex items-center max-w-md mx-auto bg-white rounded-full "
             x-data="{ search: '' }"
@@ -107,131 +107,158 @@ const Usuarios = () => {
           </div>
         </div>*/}
 
-        <div className="text-green-300 mt-9 font-semibold">
-          <h1 className="text-5xl">Usuarios</h1>
-        </div>
-        <div className="flex items-center">
-          <div className="overflow-auto lg:overflow-visible h-full w-full items-center">
-            <div className="flex w-full justify-center items-center ">
-              <table className="table usuarios text-gray-400 border-separate space-y-6 text-sm">
-                <thead className="bg-gray-800 text-gray-100">
-                  <tr>
-                    <th className="p-3 items-center justify-center ">Identificacion</th>
-                    <th className="p-3 items-center justify-center ">Nombre</th>
-                    <th className="p-3 items-center justify-center ">Correo</th>
-                    <th className="p-3 items-center justify-center ">Rol</th>
-                    <th className="p-3 items-center justify-center ">Estado</th>
-                  </tr>
-                </thead>
-                {/*
-                <tbody>
-                  {usuarios.map((user) => {
-                    return (
-                      <TableItem
-                        Id={user._id}
-                        nombre={user.Nombre}
-                        userName={user.UserName}
-                        rol={user.Rol}
-                        estado={user.Estado}
-                        refresh={ObtenerUsuarios}
-                      />
-                    );
-                  })}
-                </tbody>
-                */}
-              </table>
+            <div className="flex text-green-300 mt-9 font-semibold justify-center">
+              <h1 className="text-5xl">Usuarios</h1>
             </div>
-            <div>
-              <Link to="/newuser">
-                <button className="mt-5 p-2 pl-5 pr-5 bg-green-300 text-gray-800 hover:bg-green-800 hover:text-gray-200 text-lg rounded-lg focus:border-4 border-blue-300">
-                  Agregar Usuario
-                </button>
-              </Link>
+            <Link to="/newuser">
+              <button className="mt-5 mx-32 p-2 pl-5 pr-5 bg-green-300 text-gray-800 hover:bg-green-800 hover:text-gray-200 text-lg rounded-lg focus:border-4 border-blue-300">
+                Agregar Usuario
+              </button>
+            </Link>
+            <div className="flex items-center">
+              <div className="overflow-auto lg:overflow-visible h-full w-full items-center">
+                <div className="flex w-full justify-center items-center  ">
+                  {loading ? <h1 className="text-white">Cargando...</h1> :
+                    <Tabla usuarios={data.listarUsuarios} />
+                  }
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    </Navbar>
+      </Navbar>
     </>
   );
 };
 
-/*
-const TableItem = ({ Id, nombre, userName, rol, estado, refresh }) => {
-  const borrarItem = async () => {
-    Swal.fire({
-      title: `Estas seguro de borrar el Usuario ${userName}?`,
-      text: "Esta acción no se puede deshacer",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, borrar!",
-      showLoaderOnConfirm: true,
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const options = {
-          method: "DELETE",
-          url: `https://thawing-crag-36588.herokuapp.com/Usuarios/${Id}`,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
-        await axios
-          .request(options)
-          .then(function (response) {
-            Swal.fire("Borrado!", "El Usuario ha sido borrado", "success").then(
-              (x) => {
-                refresh();
-              }
-            );
-          })
-          .catch(function (error) {
-            console.error(error);
-          });
+const Tabla = ({ usuarios }) => {
+
+  const [actualizarEstado, { data, error }] = useMutation(ACTUALIZAR_ESTADO_USUARIO)
+
+  return (
+    <>
+      <div className="absolute" >
+        {error && <ToastMui info="error" />}
+        {data && <ToastMui info="success" />}
+      </div>
+      <table className="table usuarios text-gray-400 border-separate space-y-6 text-sm">
+        <thead className="bg-gray-800 text-gray-100">
+          <tr>
+            <th className="p-3 items-center justify-center ">Identificacion</th>
+            <th className="p-3 items-center justify-center ">Nombre</th>
+            <th className="p-3 items-center justify-center ">Correo</th>
+            <th className="p-3 items-center justify-center ">Rol</th>
+            <th className="p-3 items-center justify-center ">Estado</th>
+          </tr>
+        </thead>
+        {usuarios &&
+          usuarios.map((usuario, index) => {
+            return (
+              <CuerpoTabla
+                key={index}
+                _id={usuario._id}
+                Identificacion={usuario.Identificacion}
+                Nombre={usuario.Primer_Nombre}
+                Apellido={usuario.Primer_Apellido}
+                Correo={usuario.Correo}
+                Rol={usuario.Rol}
+                Estado={usuario.Estado}
+                actualizarEstado={actualizarEstado}
+              />
+            )
+          }
+          )
+        }
+      </table>
+    </>
+  )
+}
+
+const CuerpoTabla = ({ _id, Identificacion, Nombre, Apellido, Correo, Rol, Estado, actualizarEstado, updateCache }) => {
+
+  const [modificarEstado, setModificarEstado] = useState(false)
+
+  const [estadoSeleccionado, setEstadoSeleccionado] = useState(Estado)
+
+  const elementoEditado = (id, valor) => {
+    setModificarEstado(true)
+    //let elemento = document.getElementById(id)
+    //setEstadoSeleccionado(document.getElementById(id).options[elemento.selectedIndex].value)
+    setEstadoSeleccionado(valor)
+    console.log(estadoSeleccionado)
+  }
+
+  const reiniciarEstado = (id) => {
+    document.getElementById(id).value = Estado
+    setEstadoSeleccionado(Estado)
+  }
+
+  const ejecutarCambio = (informacion) => {
+    actualizarEstado({
+      variables: { ...informacion },
+      optimisticResponse: true,
+      update: (cache) => {
+
+        const usuariosListados = cache.readQuery({ query: LISTAR_USUARIOS });
+        const cambioDeEstado = usuariosListados.listarUsuarios.map(usuario => {
+          if (usuario._id === informacion._id) {
+            return { ...usuario, Estado: usuario.Estado };
+          } else {
+            return usuario;
+          }
+        });
+        cache.writeQuery({
+          query: LISTAR_USUARIOS,
+          data: { listarUsuarios: cambioDeEstado }
+        });
       }
-    });
+    })
   };
   
   return (
-    <tr className="bg-gray-800 text-gray-100">
-      <td className="p-3 justify-center items-center">
-        <div>{Id}</div>
-      </td>
-      <td className="p-3 justify-center items-center">
-        <div>{nombre}</div>
-      </td>
-      <td className="p-3 justify-center items-center">
-        <div>{userName}</div>
-      </td>
-      <td className="p-3 justify-center items-center">{rol}</td>
-      <td className="p-3 justify-center items-center font-bold">{estado}</td>
-      <td className="p-3 justify-center items-center">
-        <Tooltip title="Editar Usuario" arrow>
-          <Link to={`/admin/detalle-usuario/${Id}`}>
-            <i
-              class="bx bx-edit-alt hover:text-yellow-300"
-              aria-label="Editar"
-            ></i>
-          </Link>
-        </Tooltip>
-        <Tooltip title="Borrar Usuario" arrow>
-          <button
-            className="pl-4"
-            onClick={(x) => {
-              borrarItem();
-            }}
-          >
-            <i className="bx bx-trash hover:text-red-600"></i>
-          </button>
-        </Tooltip>
-      </td>
-    </tr>
+    <>
+      <tbody>
+        <tr className="bg-gray-800 text-gray-100">
+          <td className="p-3 justify-center items-center text-center">
+            <div>{Identificacion}</div>
+          </td>
+          <td className="p-3 justify-center items-center text-center">
+            <div>{Nombre} {Apellido}</div>
+          </td>
+          <td className="p-3 justify-center items-center text-center">
+            <div>{Correo}</div>
+          </td>
+          <td className="p-3 justify-center items-center text-center">{Rol}</td>
+          <td className="relative flex p-3 justify-center items-center font-bold space-x-2">
+            <select id={_id} className="flex  bg-transparent w-40 focus:bg-gray-700 border border-green-300 rounded-md"
+              defaultValue={Estado}
+              onChange={(e) => elementoEditado(_id, e.target.value)}>
+              <option className="bg-gray-800 text-center" value={"AUTORIZADO"} >AUTORIZADO</option>
+              <option className="bg-gray-800 text-center" value={"PENDIENTE"}>PENDIENTE</option>
+              <option className="bg-gray-800 text-center" value={"NO_AUTORIZADO"}>NO AUTORIZADO</option>
+            </select>
+            {estadoSeleccionado !== Estado ? modificarEstado &&
+              <div className="absolute space-x-4 -right-1/3 ">
+                <button
+                  title="Confirmar"
+                  onClick={() => ejecutarCambio({ _id: _id, EstadoPorAdmin: estadoSeleccionado })}>
+                  <i className="fas fa-check text-green-500" ></i>
+                </button>
+                <button
+                  title="Cancelar"
+                  onClick={() => reiniciarEstado(_id)} >
+                  <i className="fas fa-times text-red-700" ></i>
+                </button>
+              </div>
+              : null}
+          </td >
+        </tr >
+      </tbody>
+    </>
   );
 
 };
-*/
+
 
 
 export default Usuarios;
