@@ -16,6 +16,8 @@ import Usuarios from './paginas/usuarios/Usuarios';
 import CrearUsuario from './paginas/usuarios/Crear-Usuario';
 import DetalleUsuario from './paginas/usuarios/Detalle-Usuario';
 import Login from './paginas/autorizacion/Login';
+import Landingpage from './paginas/landingpage/landingpage';
+
 
 
 function App() {
@@ -51,7 +53,7 @@ function App() {
               <Route index element={<Sesion />} />
             </Route>
             <Route path="/" element={<Publico />}>
-              <Route index element={<Presentacion />} />
+              <Route index element={<Landingpage />} />
               <Route path="avances" element={<Avances />} />
               <Route path="inscrip" element={<Inscrip />} />
               <Route path="proyectos" element={<Proyectos />} />
