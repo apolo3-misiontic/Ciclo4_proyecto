@@ -46,7 +46,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="sesion" element={<Privado />} >
-              <Route index element={<Sesion />} />
+              <Route index element={<Proyectos />} />
               <Route path="usuarios" element={<Usuarios />} />
               <Route path="avances" element={<Avances />} />
               <Route path="inscripciones" element={<Inscripiones />} />
@@ -57,6 +57,7 @@ function App() {
               <Route index element={<Presentacion />} />
               <Route path="ingresar" element={<Acceso />} />
               <Route path="registrar" element={<Registro />} />
+              <Route path="detalle" element={<DetalleUsuario />} />
             </Route>
           </Routes>
         </BrowserRouter>

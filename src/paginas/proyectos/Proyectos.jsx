@@ -63,13 +63,9 @@ const Proyectos = () => {
                       <tr>
                         <th className="p-3 items-center justify-center ">Nombre</th>
                         <th className="p-3 items-center justify-center ">Lider</th>
-                        <th className="p-3 items-center justify-center ">Fecha Inicio</th>
-                        <th className="p-3 items-center justify-center ">Fecha Final</th>
                         <th className="p-3 items-center justify-center ">Estado</th>
                         <th className="p-3 items-center justify-center ">Fase</th>
-                        <th className="p-3 items-center justify-center ">Presupuesto</th>
-                        <th className="p-3 items-center justify-center ">Objetivo General</th>
-                        <th className="p-3 items-center justify-center ">Objetivos Especificos</th>
+                        <th className="p-3 items-center justify-center ">Detalles</th>
                       </tr>
                     </thead>
                     {/*
