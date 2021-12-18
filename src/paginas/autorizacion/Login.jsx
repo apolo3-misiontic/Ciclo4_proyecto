@@ -5,7 +5,7 @@ import "../estilos/login.css";
 
 const Login = () => {
   return (
-    <div className= 'divPadre'>
+    <div className= 'divPadre bg-grey-900'>
       <div className='divForm'>
         <form className='formulario'>
           <input type='hidden' name='remember' defaultValue='true' />
