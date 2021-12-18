@@ -1,31 +1,43 @@
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation, useLazyQuery, useQuery } from '@apollo/client'
 import React, { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 import { REFRESCAR_TOKEN } from '../../graphql/Auth/Queries'
 import { useAuth } from '../../hooks/authContext'
-import { NavbarTail } from '../../layouts/NavbarTail'
+import Sidebar from './Sidebar'
 
 const Privado = () => {
-    /* const navigate = useNavigate()
     const { guardarToken } = useAuth()
 
-    const { loading, data } = useQuery(REFRESCAR_TOKEN)
-    
-    
-    if (loading) return <h1>Cargando hacia sesion...</h1>
-    
-    console.log(data)
-    if (data?.refrescarTokenUsuario.Token) {
-        guardarToken(data.refrescarTokenUsuario.Token)
-    } else {
-        navigate("/ingresar")
-    } */
+    const [refrescar, { loading, data }] = useLazyQuery(REFRESCAR_TOKEN)
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        refrescar()
+    }, [refrescar])
+
+    useEffect(() => {
+
+        if (data) {
+            if (data.refrescarTokenUsuario.Token) {
+                guardarToken(data.refrescarTokenUsuario.Token)
+            } else {
+                guardarToken(null)
+                navigate("/ingresar", { replace: true })
+            }
+        }
+
+    }, [data, guardarToken, navigate])
+
+
+    if (loading) return <h1>Cargando...</h1>
 
     return (
-        <>
-            <NavbarTail></NavbarTail>
-            <Outlet></Outlet>
-        </>
+        <Sidebar>
+            <div className='ml-56'>
+                <Outlet />
+            </div>
+        </Sidebar>
     )
 }
 

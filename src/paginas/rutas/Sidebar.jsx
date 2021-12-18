@@ -1,25 +1,32 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 //import logo from "../admin/logo.PNG";
 //import { useAuth0 } from "@auth0/auth0-react";
 //import PrivateRoute from "../../components/PrivateRoute";
 
-const Navbar = ({ children }) => {
+const Sidebar = ({ children }) => {
   //const { logout } = useAuth0();
+  const navigate = useNavigate()
+
+  const cerrarSesion = ()=>{
+    localStorage.removeItem('Token')
+    navigate("/", {replace: true})
+  }
+
   return (
-    
+    <>
       <div className="flex w-full h-full">
         <link
           rel="stylesheet"
           href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
         />
-        <div className="flex flex-col md:flex-row flex-nowrap h-full">
+        <div className="fixed flex flex-col md:flex-row flex-nowrap h-full">
           <div className="min-h-screen flex flex-col bg-gray-700">
-            <div className="flex flex-col mt-5 py-5 w-56 rounded-r-3xl overflow-hidden">
+            <div className="flex flex-col mt-5 py-5 w-56  rounded-r-3xl overflow-hidden">
               <ul className="flex flex-col py-4">
-              <li>
+                <li>
                   <Link
-                    to="/avances"
+                    to="avances"
                     className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-100 hover:text-black"
                   >
                     <span className="inline-flex items-center justify-center h-12 w-12 text-lg">
@@ -30,7 +37,7 @@ const Navbar = ({ children }) => {
                 </li>
                 <li>
                   <Link
-                    to="/inscrip"
+                    to="inscripciones"
                     className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-100 hover:text-black"
                   >
                     <span className="inline-flex items-center justify-center h-12 w-12 text-lg">
@@ -41,7 +48,7 @@ const Navbar = ({ children }) => {
                 </li>
                 <li>
                   <Link
-                    to="/proyectos"
+                    to="proyectos"
                     className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-100 hover:text-black"
                   >
                     <span className="inline-flex items-center justify-center h-12 w-12 text-lg">
@@ -52,7 +59,7 @@ const Navbar = ({ children }) => {
                 </li>
                 <li>
                   <Link
-                    to="/usuarios"
+                    to="usuarios"
                     className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-100 hover:text-black"
                   >
                     <span className="inline-flex items-center justify-center h-12 w-12 text-lg">
@@ -61,7 +68,17 @@ const Navbar = ({ children }) => {
                     <span className="text-lg font-large">Usuarios</span>
                   </Link>
                 </li>
-               
+                <li>
+                  <button
+                    className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-100 hover:text-black"
+                    onClick={cerrarSesion}
+                  >
+                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg">
+                      <i className="bx bx-user"></i>
+                    </span>
+                    <span className="text-lg font-large">Cerrar Sesion</span>
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
@@ -70,8 +87,8 @@ const Navbar = ({ children }) => {
           {children}
         </div>
       </div>
-  
+    </>
   );
 };
 
-export default Navbar;
+export default Sidebar;

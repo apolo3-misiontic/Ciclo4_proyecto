@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 //import axios from "axios";
-import Navbar from "../rutas/Navbar";
+import Sidebar from "../rutas/Sidebar";
 import { Link } from "react-router-dom";
 import { ToastMui } from "../../componentes/ToastMui";
 import { useMutation, useQuery } from "@apollo/client"
 import { LISTAR_USUARIOS } from "../../graphql/Usuarios/QuerysUsuario";
 import { ACTUALIZAR_ESTADO_USUARIO } from "../../graphql/Usuarios/MutationsUsuario";
-import "./Main.css";
 //import _, { filter } from "underscore";
 //import { Tooltip } from "@material-ui/core";
 const Usuarios = () => {
@@ -56,8 +55,7 @@ const Usuarios = () => {
   };
   */
   return (
-    <>
-      <Navbar>
+    
         <div>
           <link
             href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
@@ -126,8 +124,6 @@ const Usuarios = () => {
             </div>
           </div>
         </div>
-      </Navbar>
-    </>
   );
 };
 
@@ -174,7 +170,7 @@ const Tabla = ({ usuarios }) => {
   )
 }
 
-const CuerpoTabla = ({ _id, Identificacion, Nombre, Apellido, Correo, Rol, Estado, actualizarEstado, updateCache }) => {
+const CuerpoTabla = ({ _id, Identificacion, Nombre, Apellido, Correo, Rol, Estado, actualizarEstado }) => {
 
   const [modificarEstado, setModificarEstado] = useState(false)
 
@@ -238,16 +234,16 @@ const CuerpoTabla = ({ _id, Identificacion, Nombre, Apellido, Correo, Rol, Estad
               <option className="bg-gray-800 text-center" value={"NO_AUTORIZADO"}>NO AUTORIZADO</option>
             </select>
             {estadoSeleccionado !== Estado ? modificarEstado &&
-              <div className="absolute space-x-4 -right-1/3 ">
+              <div className="absolute space-x-5 -right-1/3">
                 <button
                   title="Confirmar"
                   onClick={() => ejecutarCambio({ _id: _id, EstadoPorAdmin: estadoSeleccionado })}>
-                  <i className="fas fa-check text-green-500" ></i>
+                  <i className="fas fa-check fa-lg text-green-500" ></i>
                 </button>
                 <button
                   title="Cancelar"
                   onClick={() => reiniciarEstado(_id)} >
-                  <i className="fas fa-times text-red-700" ></i>
+                  <i className="fas fa-times fa-lg text-red-700" ></i>
                 </button>
               </div>
               : null}

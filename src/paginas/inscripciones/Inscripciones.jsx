@@ -1,10 +1,8 @@
 import "../estilos/Main.css";
-import Navbar from "../rutas/Navbar";
+import Sidebar from "../rutas/Sidebar";
 
-const Inscrip = () => {
+const Inscripiones = () => {
     return (
-        <>
-        <Navbar>
         <div>
           <link
             href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
@@ -99,8 +97,6 @@ const Inscrip = () => {
             </div>
           </div>
         </div>
-        </Navbar>
-        </>
       );
     };
     
@@ -181,4 +177,4 @@ const Inscrip = () => {
     */
     
     
-    export default Inscrip;
+    export default Inscripiones;

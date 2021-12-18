@@ -47,7 +47,7 @@ const CrearUsuario = () => {
   return (
     <div className="flex-row items-center justify-center overflow-hidden min-h-screen min-w-full px-5 py-10 lg:px-20 bg-gray-900">
       <div className="flex-col flex items-center justify-center w-full text-green-400 text-3xl ">
-        Crear Nuevo Usuario
+        Registro
       </div>
       <div className="flex-col w-full ">
         <form className="flex flex-col w-full p-10 px-8 pt-6 mx-auto my-4 mb-3 transition duration-500 ease-in-out transform bg-white border rounded-lg lg:w-1/2 ">

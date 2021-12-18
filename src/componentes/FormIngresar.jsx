@@ -6,7 +6,7 @@ import { useAuth } from '../hooks/authContext'
 
 const FormIngresar = () => {
 
-    const [form, setForm] = useState({})
+    const [formulario, setFomulario] = useState({})
     const { guardarToken } = useAuth()
 
     const [login, { data, loading, error }] = useMutation(LOGUEO_USUARIO)
@@ -14,8 +14,8 @@ const FormIngresar = () => {
     const navigate = useNavigate()
 
     const guardarCampos = (campo, valor) => {
-        setForm({
-            ...form,
+        setFomulario({
+            ...formulario,
             [campo]: valor ? valor : undefined
         })
     }
@@ -24,7 +24,7 @@ const FormIngresar = () => {
         e.preventDefault()
         login({
             variables: {
-                ...form
+                ...formulario
             }
         })
     }

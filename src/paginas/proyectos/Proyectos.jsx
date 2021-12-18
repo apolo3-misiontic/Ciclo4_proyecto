@@ -1,10 +1,8 @@
 import "../estilos/Main.css";
-import Navbar from "../rutas/Navbar";
+import Sidebar from "../rutas/Sidebar";
 
 const Proyectos = () => {
     return (
-        <>
-        <Navbar>
         <div>
           <link
             href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
@@ -103,8 +101,6 @@ const Proyectos = () => {
             </div>
           </div>
         </div>
-        </Navbar>
-        </>
       );
     };
     

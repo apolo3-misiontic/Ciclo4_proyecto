@@ -10,12 +10,10 @@ import { AuthContext } from './hooks/authContext';
 import { UsuarioContext } from './hooks/usuarioContext';
 import jwtDecode from 'jwt-decode';
 import Avances from './paginas/avances/Avances';
-import Inscrip from './paginas/inscripciones/Inscripciones';
 import Proyectos from './paginas/proyectos/Proyectos';
 import Usuarios from './paginas/usuarios/Usuarios';
-import CrearUsuario from './paginas/usuarios/Crear-Usuario';
 import DetalleUsuario from './paginas/usuarios/Detalle-Usuario';
-import Login from './paginas/autorizacion/Login';
+import Inscripiones from './paginas/inscripciones/Inscripciones';
 
 
 function App() {
@@ -47,19 +45,17 @@ function App() {
       <UsuarioContext.Provider value={{ dataUsuario, setDataUsuario }}>
         <BrowserRouter>
           <Routes>
-            <Route path="/sesion" element={<Privado />} >
+            <Route path="sesion" element={<Privado />} >
               <Route index element={<Sesion />} />
+              <Route path="usuarios" element={<Usuarios />} />
+              <Route path="avances" element={<Avances />} />
+              <Route path="inscripciones" element={<Inscripiones />} />
+              <Route path="proyectos" element={<Proyectos />} />
+              <Route path="perfil/:id" element={<DetalleUsuario />} />
             </Route>
             <Route path="/" element={<Publico />}>
               <Route index element={<Presentacion />} />
-              <Route path="avances" element={<Avances />} />
-              <Route path="inscrip" element={<Inscrip />} />
-              <Route path="proyectos" element={<Proyectos />} />
-              <Route path="usuarios" element={<Usuarios />} />
-              <Route path="newuser" element={<CrearUsuario />} />
-              <Route path="/detuser/:id" element={<DetalleUsuario />} />
               <Route path="ingresar" element={<Acceso />} />
-              <Route path="login" element={<Login />} />
               <Route path="registrar" element={<Registro />} />
             </Route>
           </Routes>

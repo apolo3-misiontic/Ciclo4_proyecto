@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Swal from "sweetalert2";
 
 const DetalleUsuario = () => {
   let { id } = useParams();
@@ -15,66 +14,6 @@ const DetalleUsuario = () => {
   const [mostrarTabla, setMostrarTabla] = useState(true);
   const [usuario, setUsuario] = useState([]);
 
-  useEffect(() => {
-    const ObtenerUsuario = async () => {
-      const options = {
-        method: "GET",
-        url: `https://thawing-crag-36588.herokuapp.com/Usuarios/${id}`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      await axios
-        .request(options)
-        .then(function (response) {
-          // response.data
-          setUsuario(response.data[0]);
-          setNombre(response.data[0].Nombre);
-          setUserName(response.data[0].UserName);
-          setRol(response.data[0].Rol);
-          setEstado(response.data[0].Estado);
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-    };
-
-    //obtener lista de vehículos desde el backend
-    if (mostrarTabla) {
-      ObtenerUsuario();
-    }
-  }, [id, mostrarTabla]);
-
-  const guardar = async () => {
-    const options = {
-      method: "PATCH",
-      url: `https://thawing-crag-36588.herokuapp.com/Usuarios/${id}`,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        Nombre: nombre,
-        Rol: rol,
-        Estado: estado,
-        UserName: userName,
-      },
-    };
-    console.log(options);
-    await axios
-      .request(options)
-      .then(function (response) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Usuario Modificado con exito",
-          showConfirmButton: false,
-          timer: 1500,
-        }).then((x) => {});
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  };
 
   return (
     <div className="flex-row items-center justify-center min-h-screen min-w-full px-5 py-12 lg:px-20 bg-gray-900">
@@ -184,9 +123,6 @@ const DetalleUsuario = () => {
           <div className="flex items-center w-full pt-4 mb-4">
             <input
               type="button"
-              onClick={(x) => {
-                guardar();
-              }}
               className="w-full py-3 text-base text-white transition duration-500 ease-in-out transform bg-green-400  rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-green-900 "
               value={"Actualizar Usuario"}
             />
