@@ -46,7 +46,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="sesion" element={<Privado />} >
-              <Route index element={<Proyectos />} />
+              <Route index element={<Sesion />} />
               <Route path="usuarios" element={<Usuarios />} />
               <Route path="avances" element={<Avances />} />
               <Route path="inscripciones" element={<Inscripiones />} />

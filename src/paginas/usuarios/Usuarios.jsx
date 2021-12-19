@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 //import axios from "axios";
-import Sidebar from "../rutas/Sidebar";
 import { Link } from "react-router-dom";
 import { ToastMui } from "../../componentes/ToastMui";
 import { useMutation, useQuery } from "@apollo/client"
 import { LISTAR_USUARIOS } from "../../graphql/Usuarios/QuerysUsuario";
 import { ACTUALIZAR_ESTADO_USUARIO } from "../../graphql/Usuarios/MutationsUsuario";
+import AuthRol from "../../componentes/AuthRol";
 //import _, { filter } from "underscore";
 //import { Tooltip } from "@material-ui/core";
 const Usuarios = () => {
@@ -55,14 +55,14 @@ const Usuarios = () => {
   };
   */
   return (
-    
-        <div>
-          <link
-            href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
-            rel="stylesheet"
-          />
-          <div className="flex-row items-center justify-center min-h-screen min-w-full px-5 py-12 lg:px-20 bg-gray-900">
-            {/*<div className="">
+
+    <div>
+      <link
+        href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+        rel="stylesheet"
+      />
+      <div className="flex-row items-center justify-center min-h-screen min-w-full px-5 py-12 lg:px-20 bg-gray-900">
+        {/*<div className="">
           <div
             class="flex items-center max-w-md mx-auto bg-white rounded-full "
             x-data="{ search: '' }"
@@ -105,25 +105,25 @@ const Usuarios = () => {
           </div>
         </div>*/}
 
-            <div className="flex text-green-300 mt-9 font-semibold justify-center">
-              <h1 className="text-5xl">Usuarios</h1>
-            </div>
-            <Link to="/newuser">
-              <button className="mt-5 mx-32 p-2 pl-5 pr-5 bg-green-300 text-gray-800 hover:bg-green-800 hover:text-gray-200 text-lg rounded-lg focus:border-4 border-blue-300">
-                Agregar Usuario
-              </button>
-            </Link>
-            <div className="flex items-center">
-              <div className="overflow-auto lg:overflow-visible h-full w-full items-center">
-                <div className="flex w-full justify-center items-center  ">
-                  {loading ? <h1 className="text-white">Cargando...</h1> :
-                    <Tabla usuarios={data.listarUsuarios} />
-                  }
-                </div>
-              </div>
+        <div className="flex text-green-300 mt-9 font-semibold justify-center">
+          <h1 className="text-5xl">Usuarios</h1>
+        </div>
+        <Link to="/newuser">
+          <button className="mt-5 mx-32 p-2 pl-5 pr-5 bg-green-300 text-gray-800 hover:bg-green-800 hover:text-gray-200 text-lg rounded-lg focus:border-4 border-blue-300">
+            Agregar Usuario
+          </button>
+        </Link>
+        <div className="flex items-center">
+          <div className="overflow-auto lg:overflow-visible h-full w-full items-center">
+            <div className="flex w-full justify-center items-center  ">
+              {loading ? <h1 className="text-white">Cargando...</h1> :
+                <Tabla usuarios={data.listarUsuarios} />
+              }
             </div>
           </div>
         </div>
+      </div>
+    </div>
   );
 };
 
@@ -137,14 +137,14 @@ const Tabla = ({ usuarios }) => {
         {error && <ToastMui info="error" />}
         {data && <ToastMui info="success" />}
       </div>
-      <table className="table usuarios text-gray-400 border-separate space-y-6 text-sm">
+      <table className="table text-gray-400 border-separate space-y-6 text-sm">
         <thead className="bg-gray-800 text-gray-100">
           <tr>
-            <th className="p-3 items-center justify-center ">Identificacion</th>
+            <th className="p-3 items-center justify-center">Identificacion</th>
             <th className="p-3 items-center justify-center ">Nombre</th>
             <th className="p-3 items-center justify-center ">Correo</th>
             <th className="p-3 items-center justify-center ">Rol</th>
-            <th className="p-3 items-center justify-center ">Estado</th>
+            <th className="p-3 items-center justify-center">Estado</th>
           </tr>
         </thead>
         {usuarios &&
@@ -210,11 +210,11 @@ const CuerpoTabla = ({ _id, Identificacion, Nombre, Apellido, Correo, Rol, Estad
       }
     })
   };
-  
+
   return (
     <>
       <tbody>
-        <tr className="bg-gray-800 text-gray-100">
+        <tr className="bg-gray-800 text-gray-100 ">
           <td className="p-3 justify-center items-center text-center">
             <div>{Identificacion}</div>
           </td>
@@ -224,20 +224,22 @@ const CuerpoTabla = ({ _id, Identificacion, Nombre, Apellido, Correo, Rol, Estad
           <td className="p-3 justify-center items-center text-center">
             <div>{Correo}</div>
           </td>
-          <td className="p-3 justify-center items-center text-center">{Rol}</td>
-          <td className="relative flex p-3 justify-center items-center font-bold space-x-2">
+          <td className="p-3 justify-center items-center text-center ">{Rol}</td>
+          <td className="relative p-3 justify-center items-center font-bold space-x-2 ">
             <select id={_id} className="flex  bg-transparent w-40 focus:bg-gray-700 border border-green-300 rounded-md"
               defaultValue={Estado}
               onChange={(e) => elementoEditado(_id, e.target.value)}>
               <option className="bg-gray-800 text-center" value={"AUTORIZADO"} >AUTORIZADO</option>
               <option className="bg-gray-800 text-center" value={"PENDIENTE"}>PENDIENTE</option>
-              <option className="bg-gray-800 text-center" value={"NO_AUTORIZADO"}>NO AUTORIZADO</option>
+              <AuthRol listaRoles={["ADMINISTRADOR"]} >
+                <option className="bg-gray-800 text-center" value={"NO_AUTORIZADO"}>NO AUTORIZADO</option>
+              </AuthRol>
             </select>
             {estadoSeleccionado !== Estado ? modificarEstado &&
-              <div className="absolute space-x-5 -right-1/3">
+              <div className="absolute space-x-5 bottom-3 -right-1/3">
                 <button
                   title="Confirmar"
-                  onClick={() => ejecutarCambio({ _id: _id, EstadoPorAdmin: estadoSeleccionado })}>
+                  onClick={() => ejecutarCambio({ _id: _id, Estado: estadoSeleccionado })}>
                   <i className="fas fa-check fa-lg text-green-500" ></i>
                 </button>
                 <button
