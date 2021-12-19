@@ -5,7 +5,10 @@ const AuthRol = ({ listaRoles, children }) => {
     const { dataUsuario } = useUsuario()
 
     if (listaRoles.includes(dataUsuario.Rol))
-        return children
+        return <>{children}</>
+
+    return <></>
 }
+
 
 export default AuthRol
