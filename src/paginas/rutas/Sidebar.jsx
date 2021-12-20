@@ -1,15 +1,14 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-//import logo from "../admin/logo.PNG";
-//import { useAuth0 } from "@auth0/auth0-react";
-//import PrivateRoute from "../../components/PrivateRoute";
+import { useAuth } from "../../hooks/authContext";
+
 
 const Sidebar = ({ children }) => {
-  //const { logout } = useAuth0();
   const navigate = useNavigate()
+  const { guardarToken } = useAuth()
 
   const cerrarSesion = ()=>{
-    localStorage.removeItem('Token')
+    guardarToken(null)
     navigate("/", {replace: true})
   }
 

@@ -1,14 +1,60 @@
-import React from 'react'
+import { useMutation } from '@apollo/client'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import CargaComponente from '../../componentes/CargaComponente'
+import { REGISTRAR_USUARIO } from '../../graphql/Usuarios/MutationsUsuario'
 
 const Registro = () => {
+    const [registro, { data, loading, error }] = useMutation(REGISTRAR_USUARIO)
+
     return (
         <div className="flex-row items-center justify-center overflow-hidden min-h-screen min-w-full px-5 py-10 lg:px-20 bg-gray-900">
+            {(!data && !error) &&
+                <FormularioInscripcion
+                    registro={registro}
+                    mutacion={{ loading }} >
+                </FormularioInscripcion>
+            }
+            {
+                error && <ErrorInscripcion />
+            }
+            {
+                data && <InscripcionExitosa />
+            }
+        </div>
+    )
+}
+
+const FormularioInscripcion = ({ registro, mutacion }) => {
+    const [formulario, setFormulario] = useState({})
+
+    const { loading } = mutacion
+
+    const guardarCampos = (campo, valor) => {
+        setFormulario({
+            ...formulario, [campo]: valor ? valor : undefined
+        })
+    }
+
+    const cargarRegistro = (e) => {
+        e.preventDefault()
+        registro({
+            variables: {
+                ...formulario
+            }
+        })
+    }
+
+    return (
+        <>
             <div className="flex-col flex items-center justify-center w-full text-green-400 text-3xl ">
                 <strong>¡ Bienvenido !</strong>
                 Formulario de Inscripcion
             </div>
             <div className="flex-col w-full ">
-                <form className="flex flex-col w-full p-10 px-8 pt-6 mx-auto my-4 mb-3 transition duration-500 ease-in-out transform bg-white border rounded-lg lg:w-1/2 ">
+                <form className="flex flex-col w-full p-10 px-8 pt-6 mx-auto my-4 mb-3 transition duration-500 ease-in-out transform bg-white border rounded-lg lg:w-1/2 "
+                    onSubmit={cargarRegistro}
+                >
                     <div className='grid grid-cols-2 gap-5'>
                         <div className="relative pt-4">
                             <label
@@ -21,7 +67,7 @@ const Registro = () => {
                                 required
                                 type="text"
                                 name="Primer_Nombre"
-                                placeholder=""
+                                onChange={(e) => guardarCampos(e.target.name, e.target.value)}
                                 className="w-full px-4 py-2 mt-2 mr-4 text-base text-black transition duration-500 ease-in-out transform rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
                             />
                         </div>
@@ -35,7 +81,7 @@ const Registro = () => {
                             <input
                                 type="text"
                                 name="Segundo_Nombre"
-                                placeholder=""
+                                onChange={(e) => guardarCampos(e.target.name, e.target.value)}
                                 className="w-full px-4 py-2 mt-2 mr-4 text-base text-black transition duration-500 ease-in-out transform rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
                             />
                         </div>
@@ -44,13 +90,13 @@ const Registro = () => {
                                 htmlFor="name"
                                 className="text-base leading-7 text-blueGray-500 text-center"
                             >
-                                Primer Apeliido <span className='text-red-500' >*</span>
+                                Primer Apellido <span className='text-red-500' >*</span>
                             </label>
                             <input
                                 required
                                 type="text"
-                                name="Primer_Apeliido"
-                                placeholder=""
+                                name="Primer_Apellido"
+                                onChange={(e) => guardarCampos(e.target.name, e.target.value)}
                                 className="w-full px-4 py-2 mt-2 mr-4 text-base text-black transition duration-500 ease-in-out transform rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
                             />
                         </div>
@@ -59,13 +105,13 @@ const Registro = () => {
                                 htmlFor="name"
                                 className="text-base leading-7 text-blueGray-500 text-center"
                             >
-                                Segundo Apeliido <span className='text-red-500' >*</span>
+                                Segundo Apellido <span className='text-red-500' >*</span>
                             </label>
                             <input
                                 required
                                 type="text"
-                                name="Segundo_Apeliido"
-                                placeholder=""
+                                name="Segundo_Apellido"
+                                onChange={(e) => guardarCampos(e.target.name, e.target.value)}
                                 className="w-full px-4 py-2 mt-2 mr-4 text-base text-black transition duration-500 ease-in-out transform rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
                             />
                         </div>
@@ -79,9 +125,9 @@ const Registro = () => {
                         </label>
                         <input
                             required
-                            type="text"
-                            name="mail"
-                            placeholder=""
+                            type="email"
+                            name="Correo"
+                            onChange={(e) => guardarCampos(e.target.name, e.target.value)}
                             className="w-full px-4 py-2 mt-2 mr-4 text-base text-black transition duration-500 ease-in-out transform rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
                         />
                     </div>
@@ -95,8 +141,8 @@ const Registro = () => {
                         <input
                             required
                             type="password"
-                            name="pass"
-                            placeholder=""
+                            name="Contrasena"
+                            onChange={(e) => guardarCampos(e.target.name, e.target.value)}
                             className="w-full px-4 py-2 mt-2 mr-4 text-base text-black transition duration-500 ease-in-out transform rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
                         />
                     </div>
@@ -109,9 +155,9 @@ const Registro = () => {
                         </label>
                         <input
                             required
-                            type="text"
+                            type=""
                             name="Identificacion"
-                            placeholder=""
+                            onChange={(e) => guardarCampos(e.target.name, e.target.value)}
                             className="w-full px-4 py-2 mt-2 mr-4 text-base text-black transition duration-500 ease-in-out transform rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
                         />
                     </div>
@@ -126,6 +172,7 @@ const Registro = () => {
                             required
                             name="Rol"
                             defaultValue={"Seleccione una opcion"}
+                            onChange={(e) => guardarCampos(e.target.name, e.target.value)}
                             className="w-full px-4 py-2 mt-2 mr-4 text-base text-black transition duration-500 ease-in-out transform rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
                         >
                             <option disabled value={"Seleccione una opcion"} >Seleccione una opcion</option>
@@ -134,16 +181,39 @@ const Registro = () => {
                             <option value={"ADMINISTRADOR"} >Administrador</option>
                         </select>
                     </div>
-                    <div className="flex items-center w-full pt-4 mb-4">
-                        <button
-                            type="button"
-                            className="w-full py-3 text-base text-white transition duration-500 ease-in-out transform bg-green-400  rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-green-900 "
-                        >
-                            Registrarse
-                        </button>
+                    <div className="flex justify-center items-center w-full pt-4 mb-4">
+                        {loading ? <CargaComponente /> :
+                            <button
+                                type="submit"
+                                className="w-full py-3 text-base text-white transition duration-500 ease-in-out transform bg-green-400  rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-green-900 "
+                            >
+                                Registrarse
+                            </button>
+                        }
                     </div>
                 </form>
             </div>
+        </>
+    )
+}
+const InscripcionExitosa = () => {
+    return (
+        <div className="flex flex-col items-center space-y-5 w-full p-10 px-8 pt-6 mx-auto my-4 mb-3 transition duration-500 ease-in-out transform bg-white border rounded-lg lg:w-1/2 ">
+            <h1 className='text-3xl text-green-700'>¡ Su registro ha sido exitoso !</h1>
+            <Link
+                to={"/ingresar"}
+                className="w-60 py-3 text-base text-center text-white transition duration-500 ease-in-out transform bg-green-400  rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-green-900"
+            >
+                Ingresar
+            </Link>
+        </div>
+    )
+}
+
+const ErrorInscripcion = () => {
+    return (
+        <div className="flex flex-col items-center space-y-5 w-full p-10 px-8 pt-6 mx-auto my-4 mb-3 transition duration-500 ease-in-out transform bg-white border rounded-lg lg:w-1/2 ">
+            <h1 className='text-3xl text-red-700'>¡ Ha ocurrido un error con su registro !</h1>
         </div>
     )
 }

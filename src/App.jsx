@@ -18,28 +18,34 @@ import Inscripiones from './paginas/inscripciones/Inscripciones';
 
 function App() {
 
+
   const [dataUsuario, setDataUsuario] = useState({})
-  const [token, setToken] = useState("")
+  const [token, setToken] = useState(null)
 
   const guardarToken = (token) => {
     if (token) {
       setToken(token)
       localStorage.setItem("Token", JSON.stringify(token))
     } else {
+      setToken(null)
       localStorage.removeItem("Token")
     }
   }
+  useEffect(() => {
+    let tokenAlmacenado = localStorage.getItem("Token")
+    if (tokenAlmacenado){
+      setToken(tokenAlmacenado)
+    }
+  }, [setToken])
 
   useEffect(() => {
     if (token) {
       const info_usuario = jwtDecode(token)
       setDataUsuario({ ...info_usuario })
     }
-  }, [token])
+  }, [token, setDataUsuario])
 
-  console.log(token)
-  console.log(dataUsuario)
-  
+
   return (
     <AuthContext.Provider value={{ token, setToken, guardarToken }} >
       <UsuarioContext.Provider value={{ dataUsuario, setDataUsuario }}>

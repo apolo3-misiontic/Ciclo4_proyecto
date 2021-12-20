@@ -3,11 +3,12 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
 import { LOGUEO_USUARIO } from '../../graphql/Auth/Mutations'
 import { useAuth } from '../../hooks/authContext'
+import { useUsuario } from '../../hooks/usuarioContext'
 import "../estilos/login.css";
 
 const Acceso = () => {
     const [formulario, setFomulario] = useState({})
-    const { guardarToken } = useAuth()
+    const { token, guardarToken } = useAuth()
 
     const [login, { data, loading, error }] = useMutation(LOGUEO_USUARIO)
 
@@ -29,11 +30,15 @@ const Acceso = () => {
         })
     }
 
+    /* if (token) {
+        navigate("/sesion", { replace: true })
+    } */
+
     useEffect(() => {
-        if (data?.loginUsuario.Token) {
+        if (data) {
             guardarToken(data.loginUsuario.Token)
             navigate("/sesion", { replace: true })
-        }
+        } 
     }, [data, navigate, guardarToken])
 
     if (error) return <h1>ERRRORRR {error.message}</h1>

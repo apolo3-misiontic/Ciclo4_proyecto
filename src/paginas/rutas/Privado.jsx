@@ -6,15 +6,18 @@ import { useAuth } from '../../hooks/authContext'
 import Sidebar from './Sidebar'
 
 const Privado = () => {
-    const { guardarToken } = useAuth()
+
+    const { token, guardarToken } = useAuth()
 
     const [refrescar, { loading, data }] = useLazyQuery(REFRESCAR_TOKEN)
 
     const navigate = useNavigate()
 
     useEffect(() => {
-        refrescar()
-    }, [refrescar])
+        if (token) {
+            refrescar()
+        }
+    }, [token, refrescar])
 
     useEffect(() => {
 
@@ -29,6 +32,7 @@ const Privado = () => {
 
     }, [data, guardarToken, navigate])
 
+    console.log(token)
 
     if (loading) return <h1>Cargando...</h1>
 

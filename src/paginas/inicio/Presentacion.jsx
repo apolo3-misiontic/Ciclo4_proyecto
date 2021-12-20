@@ -1,7 +1,10 @@
 import React from 'react'
 import { Link } from "react-router-dom";
+import { useAuth } from '../../hooks/authContext';
 
 const Presentacion = () => {
+  const { token } = useAuth()
+
   return (
     <div className="w-full">
       <nav className="bg-white shadow-lg">
@@ -62,7 +65,7 @@ const Presentacion = () => {
             <div className="flex justify-center lg:justify-start mt-6">
               <Link
                 className="px-4 py-3 bg-gray-900 text-gray-200 text-xs font-semibold rounded hover:bg-gray-800"
-                to="ingresar"
+                to={token? "sesion":"ingresar"}
               >
                 Login
               </Link>

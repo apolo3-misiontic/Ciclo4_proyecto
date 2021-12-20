@@ -1,6 +1,16 @@
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { ToastMui } from "../../componentes/ToastMui";
+import { useMutation, useQuery } from "@apollo/client"
+import { LISTAR_PROYECTOS } from "../../graphql/Proyectos/QuerysProyecto";
 import AuthRol from "../../componentes/AuthRol";
+import { ACTUALIZAR_ESTADO_PROYECTO } from "../../graphql/Proyectos/MutationsProyecto";
 
 const Proyectos = () => {
+
+  const { data, loading, error } = useQuery(LISTAR_PROYECTOS)
+
+
   return (
     <div>
       <link
@@ -57,43 +67,10 @@ const Proyectos = () => {
         <div className="flex items-center">
           <div className="overflow-auto lg:overflow-visible h-full w-full items-center">
             <div className="flex w-full justify-center items-center ">
-              <table className="table  text-gray-400 border-separate space-y-6 text-sm">
-                <thead className="bg-gray-800 text-gray-100">
-                  <tr>
-                    <th className="p-3 items-center justify-center ">Nombre</th>
-                    <th className="p-3 items-center justify-center ">Lider</th>
-                    <th className="p-3 items-center justify-center ">Fase</th>
-                    <th className="p-3 items-center justify-center" >Estado</th>
-                    <AuthRol listaRoles={["LIDER"]} >
-                      <th className="p-3 items-center justify-center ">Detalles</th>
-                    </AuthRol>
-                  </tr>
-                </thead>
-                {/*
-                    <tbody>
-                      {usuarios.map((user) => {
-                        return (
-                          <TableItem
-                            Id={user._id}
-                            nombre={user.Nombre}
-                            userName={user.UserName}
-                            rol={user.Rol}
-                            estado={user.Estado}
-                            refresh={ObtenerUsuarios}
-                          />
-                        );
-                      })}
-                    </tbody>
-                    */}
-              </table>
+              {loading ? <h1 className="text-white">Cargando...</h1> :
+                <Tabla proyectos={data.listarProyectos} />
+              }
             </div>
-            {/* <div>
-                  <Link to="/newuser">
-                    <button className="mt-5 p-2 pl-5 pr-5 bg-green-300 text-gray-800 hover:bg-green-800 hover:text-gray-200 text-lg rounded-lg focus:border-4 border-blue-300">
-                      Agregar Usuario
-                    </button>
-                  </Link>
-                </div> */}
           </div>
         </div>
       </div>
@@ -101,81 +78,143 @@ const Proyectos = () => {
   );
 };
 
-/*
-const TableItem = ({ Id, nombre, userName, rol, estado, refresh }) => {
-  const borrarItem = async () => {
-    Swal.fire({
-      title: `Estas seguro de borrar el Usuario ${userName}?`,
-      text: "Esta acción no se puede deshacer",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, borrar!",
-      showLoaderOnConfirm: true,
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const options = {
-          method: "DELETE",
-          url: `https://thawing-crag-36588.herokuapp.com/Usuarios/${Id}`,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
-        await axios
-          .request(options)
-          .then(function (response) {
-            Swal.fire("Borrado!", "El Usuario ha sido borrado", "success").then(
-              (x) => {
-                refresh();
-              }
-            );
-          })
-          .catch(function (error) {
-            console.error(error);
-          });
-      }
-    });
-  };
-  
+const Tabla = ({ proyectos }) => {
+
+  const [actualizarEstado, { data, error }] = useMutation(ACTUALIZAR_ESTADO_PROYECTO)
+
   return (
-    <tr className="bg-gray-800 text-gray-100">
-      <td className="p-3 justify-center items-center">
-        <div>{Id}</div>
-      </td>
-      <td className="p-3 justify-center items-center">
-        <div>{nombre}</div>
-      </td>
-      <td className="p-3 justify-center items-center">
-        <div>{userName}</div>
-      </td>
-      <td className="p-3 justify-center items-center">{rol}</td>
-      <td className="p-3 justify-center items-center font-bold">{estado}</td>
-      <td className="p-3 justify-center items-center">
-        <Tooltip title="Editar Usuario" arrow>
-          <Link to={`/admin/detalle-usuario/${Id}`}>
-            <i
-              class="bx bx-edit-alt hover:text-yellow-300"
-              aria-label="Editar"
-            ></i>
-          </Link>
-        </Tooltip>
-        <Tooltip title="Borrar Usuario" arrow>
-          <button
-            className="pl-4"
-            onClick={(x) => {
-              borrarItem();
-            }}
-          >
-            <i className="bx bx-trash hover:text-red-600"></i>
-          </button>
-        </Tooltip>
-      </td>
-    </tr>
+    <table className="table  text-gray-400 border-separate space-y-6 text-sm">
+      <thead className="bg-gray-800 text-gray-100">
+        <tr>
+          <th className="p-3 items-center justify-center ">Proyecto</th>
+          <th className="p-3 items-center justify-center ">Lider</th>
+          <th className="p-3 items-center justify-center ">Fase</th>
+          <th className="p-3 items-center justify-center" >Estado</th>
+          <AuthRol listaRoles={["LIDER"]} >
+            <th className="p-3 items-center justify-center ">Detalles</th>
+          </AuthRol>
+          <AuthRol listaRoles={["ESTUDIANTE"]} >
+            <th className="p-3 items-center justify-center ">Inscribirse</th>
+          </AuthRol>
+        </tr>
+      </thead>
+      {
+        proyectos &&
+        proyectos.map((proyecto, index) => {
+          return (
+            <CuerpoTabla
+              key={index}
+              _id={proyecto._id}
+              Proyecto={proyecto.Nombre_Proyecto}
+              Lider={proyecto.Lider_Id}
+              Fase={proyecto.Fase}
+              Estado={proyecto.Estado}
+              actualizarEstado={actualizarEstado}
+            />
+          )
+        })
+      }
+    </table>
+  )
+}
+
+const CuerpoTabla = ({ _id, Proyecto, Lider, Fase, Estado, actualizarEstado }) => {
+  const [modificarEstado, setModificarEstado] = useState(false)
+  const [modificarFase, setModificarFase] = useState(false)
+
+  const [estadoSeleccionado, setEstadoSeleccionado] = useState(Estado)
+  const [faseSeleccionada, setFaseSeleccionada] = useState(Fase)
+
+  const estadoEditado = (id, valor) => {
+    setModificarEstado(true)
+    setEstadoSeleccionado(valor)
+    console.log(estadoSeleccionado)
+  }
+
+  const faseEditada = (id, valor) => {
+    setModificarFase(true)
+    setFaseSeleccionada(valor)
+    console.log(faseSeleccionada)
+  }
+
+  const reiniciarEstado = (id) => {
+    document.getElementById(id).value = Estado
+    setEstadoSeleccionado(Estado)
+  }
+  const reiniciarFase = (id) => {
+    document.getElementById(id).value = Fase
+    setFaseSeleccionada(Fase)
+  }
+
+  const ejecutarCambio = (informacion) => {
+    actualizarEstado({
+      variables: { ...informacion },
+      optimisticResponse: true,
+      update: (cache) => {
+
+        const proyectosListados = cache.readQuery({ query: LISTAR_PROYECTOS });
+        const nuevoEstado = proyectosListados.listarProyectos.map(proyecto => {
+          if (proyecto._id === informacion._id) {
+            return { ...proyecto, Estado: proyecto.Estado };
+          } else {
+            return proyecto;
+          }
+        });
+        cache.writeQuery({
+          query: LISTAR_PROYECTOS,
+          data: { listarProyectos: nuevoEstado }
+        });
+      }
+    })
+  };
+  return (
+    <>
+      <tbody>
+        <tr className="bg-gray-800 text-gray-100 ">
+          <td className="p-3 justify-center items-center text-center">
+            {Proyecto}
+          </td>
+          <td className="p-3 justify-center items-center text-center">
+            {Lider.Primer_Nombre} {Lider.Primer_Apellido}
+          </td>
+          <td className="p-3 justify-center items-center text-center">
+            {Fase}
+          </td>
+          <td className="relative p-3 justify-center items-center font-bold space-x-2 ">
+            <select id={_id} className="flex  bg-transparent w-40 focus:bg-gray-700 border border-green-300 rounded-md"
+              defaultValue={Estado}
+              onChange={(e) => estadoEditado(_id, e.target.value)}>
+              <option className="bg-gray-800 text-center" value={"ACTIVO"} >ACTIVO</option>
+              <option className="bg-gray-800 text-center" value={"INACTIVO"}>INACTIVO</option>
+            </select>
+            <AuthRol listaRoles={["LIDER"]} >
+              <td className="p-3 justify-center items-center text-center">
+                BOTON DETALLE
+              </td>
+            </AuthRol>
+            <AuthRol listaRoles={["ESTUDIANTE"]} >
+              <td className="p-3 justify-center items-center text-center">
+                BOTON INSCIRBIRSE
+              </td>
+            </AuthRol>
+            {estadoSeleccionado !== Estado ? modificarEstado &&
+              <div className="absolute space-x-5 bottom-3 -right-1/3">
+                <button
+                  title="Confirmar"
+                  onClick={() => ejecutarCambio({ _id: _id, Estado: estadoSeleccionado, Fase: Fase })}>
+                  <i className="fas fa-check fa-lg text-green-500" ></i>
+                </button>
+                <button
+                  title="Cancelar"
+                  onClick={() => reiniciarEstado(_id)} >
+                  <i className="fas fa-times fa-lg text-red-700" ></i>
+                </button>
+              </div>
+              : null}
+          </td >
+        </tr >
+      </tbody>
+    </>
   );
- 
-};
-*/
-
-
+}
 export default Proyectos;
