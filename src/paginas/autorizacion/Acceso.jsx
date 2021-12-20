@@ -39,7 +39,7 @@ const Acceso = () => {
     if (error) return <h1>ERRRORRR {error.message}</h1>
 
     return (
-        <div className='bg-grey-900 divPadre flex-row min-h-screen min-w-full'>
+        <div className='bg-gray-900 divPadre flex-row min-h-screen min-w-full'>
             <div className='divForm'>
                 <form className='formulario' onSubmit={cargarAcceso} >
                     <input type='hidden' name='remember' />
