@@ -5,7 +5,6 @@ import { ReactComponent as Logo } from '../../imagenes/svg_modificado.svg'
 const Sesion = () => {
     const { dataUsuario } = useUsuario()
 
-    console.log(dataUsuario)
     return (
         <div className='flex flex-col min-h-screen min-w-full items-center p-10 space-y-5 bg-gray-900' >
             <h1 className='font-bold text-5xl text-green-300' >Bienvenido</h1>

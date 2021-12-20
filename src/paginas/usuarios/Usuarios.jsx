@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 //import axios from "axios";
 import { Link } from "react-router-dom";
 import { ToastMui } from "../../componentes/ToastMui";
@@ -6,37 +6,9 @@ import { useMutation, useQuery } from "@apollo/client"
 import { LISTAR_USUARIOS } from "../../graphql/Usuarios/QuerysUsuario";
 import { ACTUALIZAR_ESTADO_USUARIO } from "../../graphql/Usuarios/MutationsUsuario";
 import AuthRol from "../../componentes/AuthRol";
-//import _, { filter } from "underscore";
-//import { Tooltip } from "@material-ui/core";
-const Usuarios = () => {
-  // eslint-disable-next-line no-unused-vars
-  /*const [mostrarTabla, setMostrarTabla] = useState(true);
-  const [usuarios, setUsuarios] = useState([]);
-  const ObtenerUsuarios = async () => {
-    const options = {
-      method: "GET",
-      url: "https://thawing-crag-36588.herokuapp.com/Usuarios",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    await axios
-      .request(options)
-      .then(function (response) {
-        setUsuarios(response.data);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  };
 
-  useEffect(() => {
-    //obtener lista de vehículos desde el backend
-    if (mostrarTabla) {
-      ObtenerUsuarios();
-    }
-  }, [mostrarTabla]);
-  */
+const Usuarios = () => {
+  
   const { data, loading, error } = useQuery(LISTAR_USUARIOS)
   /*
   const aplicarFiltro = (filtro) => {
@@ -181,7 +153,6 @@ const CuerpoTabla = ({ _id, Identificacion, Nombre, Apellido, Correo, Rol, Estad
     //let elemento = document.getElementById(id)
     //setEstadoSeleccionado(document.getElementById(id).options[elemento.selectedIndex].value)
     setEstadoSeleccionado(valor)
-    console.log(estadoSeleccionado)
   }
 
   const reiniciarEstado = (id) => {
@@ -196,7 +167,7 @@ const CuerpoTabla = ({ _id, Identificacion, Nombre, Apellido, Correo, Rol, Estad
       update: (cache) => {
 
         const usuariosListados = cache.readQuery({ query: LISTAR_USUARIOS });
-        const cambioDeEstado = usuariosListados.listarUsuarios.map(usuario => {
+        const nuevoEstado = usuariosListados.listarUsuarios.map(usuario => {
           if (usuario._id === informacion._id) {
             return { ...usuario, Estado: usuario.Estado };
           } else {
@@ -205,7 +176,7 @@ const CuerpoTabla = ({ _id, Identificacion, Nombre, Apellido, Correo, Rol, Estad
         });
         cache.writeQuery({
           query: LISTAR_USUARIOS,
-          data: { listarUsuarios: cambioDeEstado }
+          data: { listarUsuarios: nuevoEstado }
         });
       }
     })
@@ -216,15 +187,17 @@ const CuerpoTabla = ({ _id, Identificacion, Nombre, Apellido, Correo, Rol, Estad
       <tbody>
         <tr className="bg-gray-800 text-gray-100 ">
           <td className="p-3 justify-center items-center text-center">
-            <div>{Identificacion}</div>
+            {Identificacion}
           </td>
           <td className="p-3 justify-center items-center text-center">
-            <div>{Nombre} {Apellido}</div>
+            {Nombre} {Apellido}
           </td>
           <td className="p-3 justify-center items-center text-center">
-            <div>{Correo}</div>
+            {Correo}
           </td>
-          <td className="p-3 justify-center items-center text-center ">{Rol}</td>
+          <td className="p-3 justify-center items-center text-center ">
+            {Rol}
+          </td>
           <td className="relative p-3 justify-center items-center font-bold space-x-2 ">
             <select id={_id} className="flex  bg-transparent w-40 focus:bg-gray-700 border border-green-300 rounded-md"
               defaultValue={Estado}
