@@ -80,11 +80,11 @@ const Usuarios = () => {
         <div className="flex text-green-300 mt-9 font-semibold justify-center">
           <h1 className="text-5xl">Usuarios</h1>
         </div>
-        <Link to="/newuser">
+        {/* <Link to="/newuser">
           <button className="mt-5 mx-32 p-2 pl-5 pr-5 bg-green-300 text-gray-800 hover:bg-green-800 hover:text-gray-200 text-lg rounded-lg focus:border-4 border-blue-300">
             Agregar Usuario
           </button>
-        </Link>
+        </Link> */}
         <div className="flex items-center">
           <div className="overflow-auto lg:overflow-visible h-full w-full items-center">
             <div className="flex w-full justify-center items-center  ">
