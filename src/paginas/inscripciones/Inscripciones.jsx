@@ -9,11 +9,12 @@ import AuthRol from "../../componentes/AuthRol";
 const Inscripiones = () => {
   const { dataUsuario } = useUsuario()
   
-  const { data, loading, error } = useQuery(LISTAR_INSCRIPCIONES,
+  const { data, loading } = useQuery(LISTAR_INSCRIPCIONES,
     {
       variables: {
         Inscripciones_Lider: dataUsuario._id
-      }
+      },
+      fetchPolicy: "cache-and-network"
     }
   )
 
