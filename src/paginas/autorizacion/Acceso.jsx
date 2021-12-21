@@ -8,7 +8,7 @@ import "../estilos/login.css";
 
 const Acceso = () => {
     const [formulario, setFomulario] = useState({})
-    const { token, guardarToken } = useAuth()
+    const { guardarToken, setPermitirRefrescar } = useAuth()
 
     const [login, { data, loading, error }] = useMutation(LOGUEO_USUARIO)
 
@@ -29,10 +29,6 @@ const Acceso = () => {
             }
         })
     }
-
-    /* if (token) {
-        navigate("/sesion", { replace: true })
-    } */
 
     useEffect(() => {
         if (data) {

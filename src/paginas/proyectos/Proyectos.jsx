@@ -1,15 +1,21 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { ToastMui } from "../../componentes/ToastMui";
 import { useMutation, useQuery } from "@apollo/client"
 import { LISTAR_PROYECTOS } from "../../graphql/Proyectos/QuerysProyecto";
 import AuthRol from "../../componentes/AuthRol";
-import { ACTUALIZAR_ESTADO_PROYECTO } from "../../graphql/Proyectos/MutationsProyecto";
+import { ACTUALIZAR_ESTADO_PROYECTO, ACTUALIZAR_FASE_PROYECTO } from "../../graphql/Proyectos/MutationsProyecto";
+import { useUsuario } from "../../hooks/usuarioContext";
+import { INSCRIPCION_A_PROYECTO } from "../../graphql/Inscripciones/MutationsInscripcion";
+import ModalMui from "../../componentes/ModalMui";
 
 const Proyectos = () => {
-
-  const { data, loading, error } = useQuery(LISTAR_PROYECTOS)
-
+  const { dataUsuario } = useUsuario()
+  const { data, loading, error } = useQuery(LISTAR_PROYECTOS, (dataUsuario.Rol === "LIDER") &&
+  {
+    variables: {
+      filtro: dataUsuario._id
+    }
+  })
 
   return (
     <div>
@@ -80,81 +86,106 @@ const Proyectos = () => {
 
 const Tabla = ({ proyectos }) => {
 
-  const [actualizarEstado, { data, error }] = useMutation(ACTUALIZAR_ESTADO_PROYECTO)
+  const [actualizarEstado, { data: dataEstado, error: errorEstado }] = useMutation(ACTUALIZAR_ESTADO_PROYECTO)
+  const [actualizarFase, { data: dataFase, error: errorFase }] = useMutation(ACTUALIZAR_FASE_PROYECTO)
+  const [inscribirse, { data: dataInscripcion, error: errorInscripcion }] = useMutation(INSCRIPCION_A_PROYECTO,
+    {
+      refetchQueries: [LISTAR_PROYECTOS]
+    }
+  )
 
   return (
-    <table className="table  text-gray-400 border-separate space-y-6 text-sm">
-      <thead className="bg-gray-800 text-gray-100">
-        <tr>
-          <th className="p-3 items-center justify-center ">Proyecto</th>
-          <th className="p-3 items-center justify-center ">Lider</th>
-          <th className="p-3 items-center justify-center ">Fase</th>
-          <th className="p-3 items-center justify-center" >Estado</th>
-          <AuthRol listaRoles={["LIDER"]} >
-            <th className="p-3 items-center justify-center ">Detalles</th>
-          </AuthRol>
-          <AuthRol listaRoles={["ESTUDIANTE"]} >
-            <th className="p-3 items-center justify-center ">Inscribirse</th>
-          </AuthRol>
-        </tr>
-      </thead>
-      {
-        proyectos &&
-        proyectos.map((proyecto, index) => {
-          return (
-            <CuerpoTabla
-              key={index}
-              _id={proyecto._id}
-              Proyecto={proyecto.Nombre_Proyecto}
-              Lider={proyecto.Lider_Id}
-              Fase={proyecto.Fase}
-              Estado={proyecto.Estado}
-              actualizarEstado={actualizarEstado}
-            />
-          )
-        })
-      }
-    </table>
+    <>
+      <div className="absolute" >
+        {errorEstado && <ToastMui info="error" />}
+        {errorFase && <ToastMui info="error" />}
+        {errorInscripcion && <ToastMui info="error" />}
+        {dataEstado && <ToastMui info="success" />}
+        {dataFase && <ToastMui info="success" />}
+        {dataInscripcion && <ToastMui info="success" />}
+      </div>
+      <table className="table  text-gray-400 border-separate space-y-6 text-sm">
+        <thead className="bg-gray-800 text-gray-100">
+          <tr>
+            <th className="p-3 items-center justify-center ">Proyecto</th>
+            <th className="p-3 items-center justify-center ">Lider</th>
+            <th className="p-3 items-center justify-center ">Situacion</th>
+            <AuthRol listaRoles={["LIDER", "ESTUDIANTE"]} >
+              <th className="p-3 items-center justify-center ">Acciones</th>
+            </AuthRol>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            proyectos &&
+            proyectos.map((proyecto, index) => {
+              return (
+                <CuerpoTabla
+                  key={index}
+                  _id={proyecto._id}
+                  Proyecto={proyecto.Nombre_Proyecto}
+                  Lider={proyecto.Lider_Id}
+                  Fase={proyecto.Fase}
+                  Estado={proyecto.Estado}
+                  Inscripciones={proyecto.Inscripciones}
+                  actualizarEstado={actualizarEstado}
+                  actualizarFase={actualizarFase}
+                  inscribirse={inscribirse}
+                />
+              )
+            })
+          }
+        </tbody>
+      </table>
+    </>
   )
 }
 
-const CuerpoTabla = ({ _id, Proyecto, Lider, Fase, Estado, actualizarEstado }) => {
+const CuerpoTabla = ({ _id, Proyecto, Lider, Fase, Estado, Inscripciones, actualizarEstado, actualizarFase, inscribirse }) => {
+
+  const { dataUsuario } = useUsuario()
+
+  const [modalInscripcion, setModalInscripcion] = useState(false)
+
+  const abrirModal = () => {
+    setModalInscripcion(true)
+  }
+
+  const [verificarSiInscrito, setVerificarSiInscrito] = useState(false)
   const [modificarEstado, setModificarEstado] = useState(false)
   const [modificarFase, setModificarFase] = useState(false)
 
   const [estadoSeleccionado, setEstadoSeleccionado] = useState(Estado)
   const [faseSeleccionada, setFaseSeleccionada] = useState(Fase)
 
-  const estadoEditado = (id, valor) => {
+  const estadoEditado = (valor) => {
     setModificarEstado(true)
     setEstadoSeleccionado(valor)
-    console.log(estadoSeleccionado)
   }
 
-  const faseEditada = (id, valor) => {
+  const faseEditada = (valor) => {
     setModificarFase(true)
     setFaseSeleccionada(valor)
-    console.log(faseSeleccionada)
   }
 
   const reiniciarEstado = (id) => {
-    document.getElementById(id).value = Estado
+    document.getElementById(id + "estado").value = Estado
     setEstadoSeleccionado(Estado)
   }
   const reiniciarFase = (id) => {
-    document.getElementById(id).value = Fase
+    document.getElementById(id + "fase").value = Fase
     setFaseSeleccionada(Fase)
   }
 
-  const ejecutarCambio = (informacion) => {
+  const ejecutarCambioEstado = (informacionEstado) => {
     actualizarEstado({
-      variables: { ...informacion },
+      variables: { ...informacionEstado },
       optimisticResponse: true,
       update: (cache) => {
 
         const proyectosListados = cache.readQuery({ query: LISTAR_PROYECTOS });
         const nuevoEstado = proyectosListados.listarProyectos.map(proyecto => {
-          if (proyecto._id === informacion._id) {
+          if (proyecto._id === informacionEstado._id) {
             return { ...proyecto, Estado: proyecto.Estado };
           } else {
             return proyecto;
@@ -166,10 +197,46 @@ const CuerpoTabla = ({ _id, Proyecto, Lider, Fase, Estado, actualizarEstado }) =
         });
       }
     })
-  };
+  }
+
+  const ejecutarCambioFase = (informacionFase) => {
+    actualizarFase({
+      variables: { ...informacionFase },
+      optimisticResponse: true,
+      update: (cache) => {
+
+        const proyectosListados = cache.readQuery({ query: LISTAR_PROYECTOS });
+        const nuevaFase = proyectosListados.listarProyectos.map(proyecto => {
+          if (proyecto._id === informacionFase._id) {
+            return { ...proyecto, Fase: proyecto.Fase };
+          } else {
+            return proyecto;
+          }
+        });
+        cache.writeQuery({
+          query: LISTAR_PROYECTOS,
+          data: { listarProyectos: nuevaFase }
+        });
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (Inscripciones.length >= 0) {
+      let proyectoInsc = Inscripciones.map((estudiante) => {
+        if (Object.keys(estudiante).includes("Estudiante_Id")) {
+          if (estudiante.Estudiante_Id._id === dataUsuario._id) {
+            setVerificarSiInscrito(true)
+          }
+        }
+        return estudiante
+      })
+    }
+  }, [setVerificarSiInscrito, Inscripciones, dataUsuario._id])
+
   return (
     <>
-      <tbody>
+      {!verificarSiInscrito &&
         <tr className="bg-gray-800 text-gray-100 ">
           <td className="p-3 justify-center items-center text-center">
             {Proyecto}
@@ -177,31 +244,58 @@ const CuerpoTabla = ({ _id, Proyecto, Lider, Fase, Estado, actualizarEstado }) =
           <td className="p-3 justify-center items-center text-center">
             {Lider.Primer_Nombre} {Lider.Primer_Apellido}
           </td>
-          <td className="p-3 justify-center items-center text-center">
-            {Fase}
-          </td>
-          <td className="relative p-3 justify-center items-center font-bold space-x-2 ">
-            <select id={_id} className="flex  bg-transparent w-40 focus:bg-gray-700 border border-green-300 rounded-md"
-              defaultValue={Estado}
-              onChange={(e) => estadoEditado(_id, e.target.value)}>
-              <option className="bg-gray-800 text-center" value={"ACTIVO"} >ACTIVO</option>
-              <option className="bg-gray-800 text-center" value={"INACTIVO"}>INACTIVO</option>
-            </select>
-            <AuthRol listaRoles={["LIDER"]} >
-              <td className="p-3 justify-center items-center text-center">
-                BOTON DETALLE
-              </td>
-            </AuthRol>
-            <AuthRol listaRoles={["ESTUDIANTE"]} >
-              <td className="p-3 justify-center items-center text-center">
-                BOTON INSCIRBIRSE
-              </td>
-            </AuthRol>
-            {estadoSeleccionado !== Estado ? modificarEstado &&
-              <div className="absolute space-x-5 bottom-3 -right-1/3">
+          <td className="relative grid-row p-3 space-y-3 justify-center items-center text-center ">
+            <div className="flex justify-between items-center text-center" >
+              <strong className="w-16" >Fase : </strong>
+              <AuthRol listaRoles={["ADMINISTRADOR"]}>
+                {(Fase === "EN_DESARROLLO") ?
+                  <select id={_id + "fase"} className="flex bg-transparent w-36 focus:bg-gray-700 border border-green-300 rounded-md"
+                    defaultValue={Fase}
+                    onChange={(e) => faseEditada(e.target.value)}>
+                    <option className="bg-gray-800 text-center" value={"TERMINADO"} >TERMINADO</option>
+                    <option className="bg-gray-800 text-center" value={"EN_DESARROLLO"}>EN DESARROLLO</option>
+                  </select>
+                  :
+                  <label className="w-36" >{Fase}</label>
+                }
+              </AuthRol>
+              <AuthRol listaRoles={["LIDER", "ESTUDIANTE"]}>
+                <label className="w-36" >{Fase}</label>
+              </AuthRol>
+            </div>
+            <div className="flex justify-between items-center text-center" >
+              <strong className="w-16" >Estado : </strong>
+              <AuthRol listaRoles={["ADMINISTRADOR"]}>
+                <select id={_id + "estado"} className="flex bg-transparent w-36 focus:bg-gray-700 border border-green-300 rounded-md"
+                  defaultValue={Estado}
+                  onChange={(e) => estadoEditado(e.target.value)}>
+                  <option className="bg-gray-800 text-center" value={"ACTIVO"} >ACTIVO</option>
+                  <option className="bg-gray-800 text-center" value={"INACTIVO"}>INACTIVO</option>
+                </select>
+              </AuthRol>
+              <AuthRol listaRoles={["LIDER", "ESTUDIANTE"]}>
+                <label className="w-36" >{Estado}</label>
+              </AuthRol>
+            </div>
+            {faseSeleccionada !== Fase ? modificarFase &&
+              <div className="absolute space-x-5 bottom-12 -right-1/4">
                 <button
                   title="Confirmar"
-                  onClick={() => ejecutarCambio({ _id: _id, Estado: estadoSeleccionado, Fase: Fase })}>
+                  onClick={() => ejecutarCambioFase({ _id: _id, Fase: faseSeleccionada })}>
+                  <i className="fas fa-check fa-lg text-green-500" ></i>
+                </button>
+                <button
+                  title="Cancelar"
+                  onClick={() => reiniciarFase(_id)} >
+                  <i className="fas fa-times fa-lg text-red-700" ></i>
+                </button>
+              </div>
+              : null}
+            {estadoSeleccionado !== Estado ? modificarEstado &&
+              <div className="absolute space-x-5 bottom-3 -right-1/4">
+                <button
+                  title="Confirmar"
+                  onClick={() => ejecutarCambioEstado({ _id: _id, Estado: estadoSeleccionado, Fase: Fase })}>
                   <i className="fas fa-check fa-lg text-green-500" ></i>
                 </button>
                 <button
@@ -211,9 +305,40 @@ const CuerpoTabla = ({ _id, Proyecto, Lider, Fase, Estado, actualizarEstado }) =
                 </button>
               </div>
               : null}
-          </td >
+          </td>
+          <AuthRol listaRoles={["LIDER"]} >
+            <td className="p-3 justify-center items-center text-center">
+              <i className="far fa-play-circle fa-3x transition ease-in-out cursor-pointer hover:text-green-300"></i>
+            </td>
+          </AuthRol>
+          <AuthRol listaRoles={["ESTUDIANTE"]} >
+            <td className="p-3 justify-center items-center text-center">
+              {Estado === "ACTIVO" ?
+                <>
+                  <button
+                    onClick={abrirModal} >
+                    <i className="fas fa-pen-fancy fa-2x transition transform ease-in-out cursor-pointer hover:-translate-y-1 hover:text-yellow-400" title="Realizar Inscripcion" ></i>
+                  </button>
+                  <ModalMui
+                    abrir={modalInscripcion}
+                    cerrar={setModalInscripcion}
+                    datos={{
+                      Proyecto: Proyecto,
+                      Lider: Lider,
+                      completarInscripcion: {
+                        inscribirse: inscribirse,
+                        variablesInscripcion: { Proyecto_Id: _id, Estudiante_Id: dataUsuario._id }
+                      }
+                    }}
+                  />
+                </>
+                :
+                <i className="fas fa-lock fa-2x text-red-600" title="Accion Bloqueada"></i>
+              }
+            </td>
+          </AuthRol>
         </tr >
-      </tbody>
+      }
     </>
   );
 }

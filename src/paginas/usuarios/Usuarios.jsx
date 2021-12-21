@@ -148,7 +148,7 @@ const CuerpoTabla = ({ _id, Identificacion, Nombre, Apellido, Correo, Rol, Estad
 
   const [estadoSeleccionado, setEstadoSeleccionado] = useState(Estado)
 
-  const elementoEditado = (id, valor) => {
+  const elementoEditado = (valor) => {
     setModificarEstado(true)
     //let elemento = document.getElementById(id)
     //setEstadoSeleccionado(document.getElementById(id).options[elemento.selectedIndex].value)
@@ -201,7 +201,7 @@ const CuerpoTabla = ({ _id, Identificacion, Nombre, Apellido, Correo, Rol, Estad
           <td className="relative p-3 justify-center items-center font-bold space-x-2 ">
             <select id={_id} className="flex  bg-transparent w-40 focus:bg-gray-700 border border-green-300 rounded-md"
               defaultValue={Estado}
-              onChange={(e) => elementoEditado(_id, e.target.value)}>
+              onChange={(e) => elementoEditado(e.target.value)}>
               <option className="bg-gray-800 text-center" value={"AUTORIZADO"} >AUTORIZADO</option>
               <option className="bg-gray-800 text-center" value={"PENDIENTE"}>PENDIENTE</option>
               <AuthRol listaRoles={["ADMINISTRADOR"]} >

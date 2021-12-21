@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 
 
 export const LISTAR_PROYECTOS = gql`
-    query ListarProyectos {
-        listarProyectos {
+    query ListarProyectos($filtro: String) {
+        listarProyectos(filtro: $filtro) {
             _id
             Nombre_Proyecto
             Lider_Id {
@@ -12,6 +12,11 @@ export const LISTAR_PROYECTOS = gql`
             }
             Estado
             Fase
+            Inscripciones {
+                Estudiante_Id {
+                    _id
+                }
+            }
         }
     }
 `

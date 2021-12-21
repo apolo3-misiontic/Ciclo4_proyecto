@@ -15,7 +15,6 @@ import Usuarios from './paginas/usuarios/Usuarios';
 import DetalleUsuario from './paginas/usuarios/Detalle-Usuario';
 import Inscripiones from './paginas/inscripciones/Inscripciones';
 
-
 function App() {
 
 
@@ -31,23 +30,24 @@ function App() {
       localStorage.removeItem("Token")
     }
   }
+
+
   useEffect(() => {
     let tokenAlmacenado = localStorage.getItem("Token")
-    if (tokenAlmacenado){
+    if (tokenAlmacenado) {
       setToken(tokenAlmacenado)
-    }
+    } 
   }, [setToken])
 
   useEffect(() => {
     if (token) {
-      const info_usuario = jwtDecode(token)
+      let info_usuario = jwtDecode(token)
       setDataUsuario({ ...info_usuario })
     }
   }, [token, setDataUsuario])
 
-
   return (
-    <AuthContext.Provider value={{ token, setToken, guardarToken }} >
+    <AuthContext.Provider value={{ token, setToken, guardarToken}} >
       <UsuarioContext.Provider value={{ dataUsuario, setDataUsuario }}>
         <BrowserRouter>
           <Routes>
@@ -58,6 +58,7 @@ function App() {
               <Route path="inscripciones" element={<Inscripiones />} />
               <Route path="proyectos" element={<Proyectos />} />
               <Route path="perfil/:id" element={<DetalleUsuario />} />
+              <Route path="avances/:id" element={<DetalleUsuario />} />
             </Route>
             <Route path="/" element={<Publico />}>
               <Route index element={<Presentacion />} />

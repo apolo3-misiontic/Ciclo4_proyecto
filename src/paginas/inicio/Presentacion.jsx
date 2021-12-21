@@ -1,14 +1,15 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 import { useAuth } from '../../hooks/authContext';
+import landing from '../../imagenes/landing.jpg'
 
 const Presentacion = () => {
   const { token } = useAuth()
 
   return (
     <div className="w-full">
-      <nav className="bg-white shadow-lg">
-        <div className="md:flex items-center justify-between py-2 px-8 md:px-12">
+      <nav className="bg-indigo-200 shadow-lg">
+        <div className="border-b-2 border-dotted border-blue-400  md:flex items-center justify-between py-2 px-8 md:px-12">
           <div className="flex justify-between items-center">
             <div className="text-2xl font-bold text-gray-800 md:text-3xl">
               <a href="#">Gestión de proyectos</a>
@@ -50,7 +51,7 @@ const Presentacion = () => {
           </div>
         </div>
       </nav>
-      <div className="flex bg-white" style={{ height: "600px" }}>
+      <div className="flex bg-indigo-100" style={{ height: "600px" }}>
         <div className="flex items-center text-center lg:text-left px-8 md:px-12 lg:w-1/2">
           <div>
             <h2 className="text-3xl font-semibold text-gray-800 md:text-4xl">
@@ -65,7 +66,7 @@ const Presentacion = () => {
             <div className="flex justify-center lg:justify-start mt-6">
               <Link
                 className="px-4 py-3 bg-gray-900 text-gray-200 text-xs font-semibold rounded hover:bg-gray-800"
-                to={token? "sesion":"ingresar"}
+                to={token ? "sesion" : "ingresar"}
               >
                 Login
               </Link>
@@ -82,6 +83,9 @@ const Presentacion = () => {
           className="hidden lg:block lg:w-1/2"
           style={{ clipPath: "polygon(10% 0, 100% 0%, 100% 100%, 0 100%)" }}
         >
+          <div className="h-full object-cover" style={{ backgroundImage: "url(" + landing + ")" }} >
+            <div className="h-full bg-indigo-600 opacity-25"></div>
+          </div>
           {/* <div
             className="h-full object-cover"
             style={{backgroundImage:{img}}

@@ -1,15 +1,30 @@
-import "../estilos/Main.css";
-import Sidebar from "../rutas/Sidebar";
+import React, { useState } from "react";
+import { ToastMui } from "../../componentes/ToastMui";
+import { useMutation, useQuery } from "@apollo/client"
+import { LISTAR_INSCRIPCIONES } from "../../graphql/Inscripciones/QuerysInscripcion";
+import { CAMBIAR_ESTADO_INSCRIPCION } from "../../graphql/Inscripciones/MutationsInscripcion";
+import { useUsuario } from "../../hooks/usuarioContext";
+import AuthRol from "../../componentes/AuthRol";
 
 const Inscripiones = () => {
-    return (
-        <div>
-          <link
-            href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
-            rel="stylesheet"
-          />
-          <div className="flex-row items-center justify-center min-h-screen min-w-full px-5 py-12 lg:px-20 bg-gray-900">
-            {/*<div className="">
+  const { dataUsuario } = useUsuario()
+  
+  const { data, loading, error } = useQuery(LISTAR_INSCRIPCIONES,
+    {
+      variables: {
+        Inscripciones_Lider: dataUsuario._id
+      }
+    }
+  )
+
+  return (
+    <div>
+      <link
+        href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+        rel="stylesheet"
+      />
+      <div className="flex-row items-center justify-center min-h-screen min-w-full px-5 py-12 lg:px-20 bg-gray-900">
+        {/*<div className="">
               <div
                 class="flex items-center max-w-md mx-auto bg-white rounded-full "
                 x-data="{ search: '' }"
@@ -51,130 +66,167 @@ const Inscripiones = () => {
                 </div>
               </div>
             </div>*/}
-    
-            <div className="flex items-center justify-center mb-3 text-green-300 mt-9 font-semibold">
-              <h1 className="text-4xl">Inscripciones</h1>
-            </div>
-            <div className="flex items-center">
-              <div className="overflow-auto lg:overflow-visible h-full w-full items-center">
-                <div className="flex w-full justify-center items-center ">
-                  <table className="table usuarios text-gray-400 border-separate space-y-6 text-sm">
-                    <thead className="bg-gray-800 text-gray-100">
-                      <tr>
-                        <th className="p-3 items-center justify-center ">Proyecto</th>
-                        <th className="p-3 items-center justify-center ">Estudiante</th>
-                        <th className="p-3 items-center justify-center ">Fecha Ingreso</th>
-                        <th className="p-3 items-center justify-center ">Fecha Egreso</th>
-                        <th className="p-3 items-center justify-center ">Estado</th>
-                      </tr>
-                    </thead>
-                    {/*
-                    <tbody>
-                      {usuarios.map((user) => {
-                        return (
-                          <TableItem
-                            Id={user._id}
-                            nombre={user.Nombre}
-                            userName={user.UserName}
-                            rol={user.Rol}
-                            estado={user.Estado}
-                            refresh={ObtenerUsuarios}
-                          />
-                        );
-                      })}
-                    </tbody>
-                    */}
-                  </table>
-                </div>
-                {/* <div>
-                  <Link to="/newuser">
-                    <button className="mt-5 p-2 pl-5 pr-5 bg-green-300 text-gray-800 hover:bg-green-800 hover:text-gray-200 text-lg rounded-lg focus:border-4 border-blue-300">
-                      Agregar Usuario
-                    </button>
-                  </Link>
-                </div> */}
-              </div>
+
+        <div className="flex items-center justify-center mb-3 text-green-300 mt-9 font-semibold">
+          <h1 className="text-4xl">Inscripciones</h1>
+        </div>
+        <div className="flex items-center">
+          <div className="overflow-auto lg:overflow-visible h-full w-full items-center">
+            <div className="flex w-full justify-center items-center ">
+              {loading ? <h1 className="text-white">Cargando...</h1> :
+                <Tabla inscripciones={data.listarInscripciones} />
+              }
             </div>
           </div>
         </div>
-      );
-    };
-    
-    /*
-    const TableItem = ({ Id, nombre, userName, rol, estado, refresh }) => {
-      const borrarItem = async () => {
-        Swal.fire({
-          title: `Estas seguro de borrar el Usuario ${userName}?`,
-          text: "Esta acción no se puede deshacer",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Si, borrar!",
-          showLoaderOnConfirm: true,
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            const options = {
-              method: "DELETE",
-              url: `https://thawing-crag-36588.herokuapp.com/Usuarios/${Id}`,
-              headers: {
-                "Content-Type": "application/json",
-              },
-            };
-            await axios
-              .request(options)
-              .then(function (response) {
-                Swal.fire("Borrado!", "El Usuario ha sido borrado", "success").then(
-                  (x) => {
-                    refresh();
-                  }
-                );
-              })
-              .catch(function (error) {
-                console.error(error);
-              });
+      </div>
+    </div>
+  );
+};
+
+const Tabla = ({ inscripciones }) => {
+
+  const [actualizarEstado, { data, error }] = useMutation(CAMBIAR_ESTADO_INSCRIPCION)
+
+  return (
+    <>
+      <div className="absolute" >
+        {error && <ToastMui info="error" />}
+        {data && <ToastMui info="success" />}
+      </div>
+      <table className="table text-gray-400 border-separate space-y-6 text-sm">
+        <thead className="bg-gray-800 text-gray-100">
+          <tr>
+            <th className="p-3 items-center justify-center ">Proyecto</th>
+            <AuthRol listaRoles={["LIDER"]} >
+              <th className="p-3 items-center justify-center ">Estudiante</th>
+            </AuthRol>
+            <th className="p-3 items-center justify-center ">Fecha Ingreso</th>
+            <th className="p-3 items-center justify-center ">Fecha Egreso</th>
+            <th className="p-3 items-center justify-center ">Estado</th>
+          </tr>
+        </thead>
+        {inscripciones &&
+          inscripciones.map((inscripcion, index) => {
+            return (
+              <CuerpoTabla
+                key={index}
+                _id={inscripcion._id}
+                Proyecto={inscripcion.Proyecto_Id.Nombre_Proyecto}
+                Nombre_Estudiante={inscripcion.Estudiante_Id}
+                Fecha_Ingreso={inscripcion.Fecha_Ingreso}
+                Fecha_Egreso={inscripcion.Fecha_Egreso}
+                Estado={inscripcion.Estado}
+                actualizarEstado={actualizarEstado}
+              />
+            )
+          }
+          )
+        }
+      </table>
+    </>
+  )
+}
+
+const CuerpoTabla = ({ _id, Proyecto, Nombre_Estudiante, Fecha_Ingreso, Fecha_Egreso, Estado, actualizarEstado }) => {
+
+  const { dataUsuario } = useUsuario()
+
+  const [modificarEstado, setModificarEstado] = useState(false)
+
+  const [estadoSeleccionado, setEstadoSeleccionado] = useState(Estado)
+
+  const elementoEditado = (valor) => {
+    setModificarEstado(true)
+    setEstadoSeleccionado(valor)
+  }
+
+  const reiniciarEstado = (id) => {
+    document.getElementById(id).value = Estado
+    setEstadoSeleccionado(Estado)
+  }
+
+  const ejecutarCambio = (informacion) => {
+    actualizarEstado({
+      variables: { ...informacion },
+      optimisticResponse: true,
+      update: (cache) => {
+
+        const inscripcionesListadas = cache.readQuery({
+          query: LISTAR_INSCRIPCIONES,
+          variables: {
+            Inscripciones_Lider: dataUsuario._id
           }
         });
-      };
-      
-      return (
-        <tr className="bg-gray-800 text-gray-100">
-          <td className="p-3 justify-center items-center">
-            <div>{Id}</div>
+        const nuevoEstadoInscripcion = inscripcionesListadas.listarInscripciones.map(inscripcion => {
+          if (inscripcion._id === informacion._id) {
+            return { ...inscripcion, Estado: inscripcion.Estado };
+          } else {
+            return inscripcion;
+          }
+        });
+        cache.writeQuery({
+          query: LISTAR_INSCRIPCIONES,
+          data: { listarInscripciones: nuevoEstadoInscripcion }
+        });
+      }
+    })
+  };
+
+  return (
+    <>
+      <tbody>
+        <tr className="bg-gray-800 text-gray-100 ">
+          <td className="p-3 justify-center items-center text-center">
+            {Proyecto}
           </td>
-          <td className="p-3 justify-center items-center">
-            <div>{nombre}</div>
+          <AuthRol listaRoles={["LIDER"]} >
+            <td className="p-3 justify-center items-center text-center">
+              {Nombre_Estudiante.Primer_Nombre} {Nombre_Estudiante.Primer_Apellido}
+            </td>
+          </AuthRol>
+          <td className="p-3 justify-center items-center text-center">
+            {Fecha_Ingreso}
           </td>
-          <td className="p-3 justify-center items-center">
-            <div>{userName}</div>
+          <td className="p-3 justify-center items-center text-center ">
+            {Fecha_Egreso}
           </td>
-          <td className="p-3 justify-center items-center">{rol}</td>
-          <td className="p-3 justify-center items-center font-bold">{estado}</td>
-          <td className="p-3 justify-center items-center">
-            <Tooltip title="Editar Usuario" arrow>
-              <Link to={`/admin/detalle-usuario/${Id}`}>
-                <i
-                  class="bx bx-edit-alt hover:text-yellow-300"
-                  aria-label="Editar"
-                ></i>
-              </Link>
-            </Tooltip>
-            <Tooltip title="Borrar Usuario" arrow>
-              <button
-                className="pl-4"
-                onClick={(x) => {
-                  borrarItem();
-                }}
-              >
-                <i className="bx bx-trash hover:text-red-600"></i>
-              </button>
-            </Tooltip>
-          </td>
-        </tr>
-      );
-    
-    };
-    */
-    
-    
-    export default Inscripiones;
+          <AuthRol listaRoles={["ESTUDIANTE"]} >
+            <td className="p-3 justify-center items-center text-center ">
+              {Estado}
+            </td>
+          </AuthRol>
+          <AuthRol listaRoles={["LIDER"]} >
+            <td className="relative p-3 justify-center items-center font-bold space-x-2 ">
+              <select id={_id} className="flex  bg-transparent w-40 focus:bg-gray-700 border border-green-300 rounded-md"
+                defaultValue={Estado}
+                onChange={(e) => elementoEditado(e.target.value)}>
+                <option className="bg-gray-800 text-center" value={"ACEPTADA"} >ACEPTADA</option>
+                <option className="bg-gray-800 text-center" value={"PENDIENTE"}>PENDIENTE</option>
+                <option className="bg-gray-800 text-center" value={"RECHAZADA"}>RECHAZADA</option>
+              </select>
+              {estadoSeleccionado !== Estado ? modificarEstado &&
+                <div className="absolute space-x-5 bottom-3 -right-1/3">
+                  <button
+                    title="Confirmar"
+                    onClick={() => ejecutarCambio({ _id: _id, Estado: estadoSeleccionado })}>
+                    <i className="fas fa-check fa-lg text-green-500" ></i>
+                  </button>
+                  <button
+                    title="Cancelar"
+                    onClick={() => reiniciarEstado(_id)} >
+                    <i className="fas fa-times fa-lg text-red-700" ></i>
+                  </button>
+                </div>
+                : null}
+            </td >
+          </AuthRol>
+        </tr >
+      </tbody>
+    </>
+  );
+
+};
+
+
+export default Inscripiones;
