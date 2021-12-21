@@ -14,3 +14,14 @@ export const ACTUALIZAR_ESTADO_PROYECTO = gql`
     }
 
 `
+export const ACTUALIZAR_FASE_PROYECTO = gql`
+    mutation CambiarFaseProyecto($id: ID!, $fase: enum_FaseProyecto!) {
+        cambiarFaseProyecto(_id: $id, Fase: $fase) {
+            _id
+            Estado
+            Fase
+            Fecha_Terminacion
+        }
+    }
+`
+

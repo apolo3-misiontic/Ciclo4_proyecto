@@ -8,7 +8,7 @@ import "../estilos/login.css";
 
 const Acceso = () => {
     const [formulario, setFomulario] = useState({})
-    const { token, guardarToken } = useAuth()
+    const { guardarToken, setPermitirRefrescar } = useAuth()
 
     const [login, { data, loading, error }] = useMutation(LOGUEO_USUARIO)
 
@@ -30,10 +30,6 @@ const Acceso = () => {
         })
     }
 
-    /* if (token) {
-        navigate("/sesion", { replace: true })
-    } */
-
     useEffect(() => {
         if (data) {
             guardarToken(data.loginUsuario.Token)
@@ -44,7 +40,7 @@ const Acceso = () => {
     if (error) return <h1>ERRRORRR {error.message}</h1>
 
     return (
-        <div className='bg-grey-900 divPadre flex-row min-h-screen min-w-full'>
+        <div className='bg-gray-900 divPadre flex-row min-h-screen min-w-full'>
             <div className='divForm'>
                 <form className='formulario' onSubmit={cargarAcceso} >
                     <input type='hidden' name='remember' />

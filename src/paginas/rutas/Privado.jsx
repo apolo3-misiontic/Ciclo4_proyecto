@@ -1,5 +1,5 @@
 import { useMutation, useLazyQuery, useQuery } from '@apollo/client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 import { REFRESCAR_TOKEN } from '../../graphql/Auth/Queries'
 import { useAuth } from '../../hooks/authContext'
@@ -7,17 +7,11 @@ import Sidebar from './Sidebar'
 
 const Privado = () => {
 
-    const { token, guardarToken } = useAuth()
+    const { guardarToken } = useAuth()
 
     const [refrescar, { loading, data }] = useLazyQuery(REFRESCAR_TOKEN)
 
     const navigate = useNavigate()
-
-    useEffect(() => {
-        if (token) {
-            refrescar()
-        }
-    }, [token, refrescar])
 
     useEffect(() => {
 
@@ -32,12 +26,11 @@ const Privado = () => {
 
     }, [data, guardarToken, navigate])
 
-    console.log(token)
 
     if (loading) return <h1>Cargando...</h1>
 
     return (
-        <Sidebar>
+        <Sidebar refrescar={refrescar} >
             <div className='ml-56'>
                 <Outlet />
             </div>
