@@ -7,10 +7,11 @@ import { ACTUALIZAR_ESTADO_PROYECTO, ACTUALIZAR_FASE_PROYECTO } from "../../grap
 import { useUsuario } from "../../hooks/usuarioContext";
 import { INSCRIPCION_A_PROYECTO } from "../../graphql/Inscripciones/MutationsInscripcion";
 import ModalMui from "../../componentes/ModalMui";
+import { LISTAR_INSCRIPCIONES } from "../../graphql/Inscripciones/QuerysInscripcion";
 
 const Proyectos = () => {
   const { dataUsuario } = useUsuario()
-  const { data, loading, error } = useQuery(LISTAR_PROYECTOS, (dataUsuario.Rol === "LIDER") &&
+  const { data, loading, error, } = useQuery(LISTAR_PROYECTOS, (dataUsuario.Rol === "LIDER") &&
   {
     variables: {
       filtro: dataUsuario._id
@@ -90,7 +91,7 @@ const Tabla = ({ proyectos }) => {
   const [actualizarFase, { data: dataFase, error: errorFase }] = useMutation(ACTUALIZAR_FASE_PROYECTO)
   const [inscribirse, { data: dataInscripcion, error: errorInscripcion }] = useMutation(INSCRIPCION_A_PROYECTO,
     {
-      refetchQueries: [LISTAR_PROYECTOS]
+      refetchQueries: [{ query: LISTAR_PROYECTOS, }, { query: LISTAR_INSCRIPCIONES }]
     }
   )
 
